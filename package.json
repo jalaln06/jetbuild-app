@@ -1,8 +1,8 @@
 {
   "name": "nestdeploy",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "<p align=\"center\">\r   <a href=\"http://nestjs.com/\" target=\"blank\"><img src=\"https://nestjs.com/img/logo_text.svg\" width=\"320\" alt=\"Nest Logo\" /></a>\r </p>",
+  "author": "Nagive Jalal <jalal0601@gmail.com>",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -18,8 +18,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "start:prod" : "node dist/main.js"
+    "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
@@ -27,7 +26,8 @@
     "@nestjs/platform-express": "^8.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "web-vitals": "^2.1.4"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
@@ -68,5 +68,18 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  }
+  },
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jalaln06/jetbuild-app.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/jalaln06/jetbuild-app/issues"
+  },
+  "homepage": "https://github.com/jalaln06/jetbuild-app#readme"
 }
