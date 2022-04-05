@@ -1,0 +1,18 @@
+<div>
+    <footer class = "footer">
+        <div class = "footer-inner">
+            <div class = "footer-inner__left">
+                <div class = "footer-inner__left-text">
+                    <p></p>
+                    <p>Время которое потребовалось на обработку запроса сервером = <span id="load-time"></span> ms</p>
+                    <p>Время для генерации дома = <span id="dom-load-time"></span> ms </p>
+                </div>
+            </div>
+    </footer>
+</div>
+<script>
+    const timeTaken = document.cookie.match(/X-Response-Time=(.+?);*/)[1]
+    document.getElementById('load-time').innerHTML = timeTaken
+    const timeDomTaken = window.performance.now().toFixed(2)
+    document.getElementById('dom-load-time').innerHTML = timeDomTaken
+    </script>

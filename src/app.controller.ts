@@ -1,12 +1,21 @@
-import { Controller, Get, Render } from '@nestjs/common';
-import { AppService } from './app.service';
-
+import { Controller, Get, Render, UseInterceptors } from '@nestjs/common'
+import { TimeCheckInterceptor } from './TimeCheckInterceptor';
+@UseInterceptors  (TimeCheckInterceptor)
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
-
+  @Get()
   @Render('index')
-  @Get(['/', '/projects'])
-  getReactApp() {
+  root() {
+    return { message: 'Hello world!' };
+  }
+  @Get('regpage')
+  @Render('regpage.hbs')
+  getReg(){
+    return {user:7232183}
+  }
+  @Get('regpagebad')
+  @Render('regpage.hbs')
+  getRegUn(){
+    return {}
   }
 }
