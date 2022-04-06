@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  first_name   String
+  last_name    String
+  role         Role      @default(WORKER)
+  password     String
+  time_created DateTime  @default(now())
+  Company      Company[]
+  Photo        Photo[]
+  Project      Project?  @relation(fields: [projectId], references: [id])
+  projectId    Int?
+}
+
+model Company {
+  id           Int       @id @default(autoincrement())
+  name         String
+  time_created DateTime  @default(now())
+  adress       String
+  city         String
+  country      String
+  language     String
+  owner        User      @relation(fields: [ownerId], references: [id])
+  ownerId      Int
+  Project      Project[]
+}
+
+model Project {
+  id           Int      @id @default(autoincrement())
+  name         String
+  time_created DateTime @default(now())
+  description  String
+  company      Company  @relation(fields: [companyId], references: [id])
+  companyId    Int
+  Point        Point[]
+  projectUsers User[]
+}
+
+model Point {
+  id           Int      @id @default(autoincrement())
+  name         String
+  time_created DateTime @default(now())
+  description  String
+  project      Project  @relation(fields: [projectId], references: [id])
+  projectId    Int
+  Photo        Photo[]
+}
+
+model Photo {
+  id           Int      @id @default(autoincrement())
+  name         String
+  time_created DateTime @default(now())
+  description  String
+  point        Point    @relation(fields: [pointId], references: [id])
+  pointId      Int
+  s3_url       String
+  user_took    User     @relation(fields: [userTookId], references: [id])
+  userTookId   Int
+}
+
+enum Role {
+  OWNER
+  MANAGER
+  WORKER
+}
