@@ -1,7 +1,7 @@
-import { Controller, Get, Render, UseInterceptors } from '@nestjs/common'
-import { TimeCheckInterceptor } from './TimeCheckInterceptor';
-@UseInterceptors  (TimeCheckInterceptor)
+import { Controller, Get, Render, UseInterceptors } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 @Controller()
+@ApiTags('old renderer')
 export class AppController {
   @Get()
   @Render('index')
@@ -10,12 +10,12 @@ export class AppController {
   }
   @Get('regpage')
   @Render('regpage.hbs')
-  getReg(){
-    return {user:7232183}
+  getReg() {
+    return { user: 7232183 };
   }
   @Get('regpagebad')
   @Render('regpage.hbs')
-  getRegUn(){
-    return {}
+  getRegUn() {
+    return {};
   }
 }
