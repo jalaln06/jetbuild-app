@@ -10,13 +10,10 @@ import { UserService } from './users/user.service';
 import { ProjectService } from './project/project.service';
 import { PointService } from './point/point.service';
 import { CompaniesService } from './companies/companies.service';
-import { AuthService } from './auth/auth.service';
-import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { UserController } from './users/user.controller';
-import { AppController } from './app.controller';
 @Module({
-  imports: [AuthModule, UsersModule],
+  imports: [UsersModule],
   controllers: [
     UserController,
     CompaniesController,
@@ -24,7 +21,6 @@ import { AppController } from './app.controller';
     PhotoController,
     ProjectController,
     PointController,
-    AppController,
   ],
   providers: [
     PrismaService,
@@ -33,7 +29,6 @@ import { AppController } from './app.controller';
     ProjectService,
     PointService,
     CompaniesService,
-    AuthService,
   ],
 })
 export class AppModule {}
