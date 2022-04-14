@@ -13,11 +13,15 @@ import {
 } from '@nestjs/swagger';
 import { PrismaService } from 'prisma/module/prisma.service';
 import { CreateUserDto, UserLoginDto } from './dto/user.dto';
+import { UserService } from './user.service';
 
 @ApiTags('users')
 @Controller('user')
 export class UserController {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly userService: UserService,
+  ) {}
 
   @ApiOperation({ summary: 'login user' })
   @ApiBadRequestResponse({ description: 'User or Passwowrd not found' })
@@ -29,6 +33,7 @@ export class UserController {
   @ApiConflictResponse({ description: 'User already exists' })
   @Post('/reguser')
   async createUser(@Body() user: CreateUserDto) {
-    throw new NotImplementedException();
+    console.log(user);
+    this.userService.createUser(user);
   }
 }

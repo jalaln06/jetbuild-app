@@ -1,21 +1,13 @@
-import { Controller, Get, Render, UseInterceptors } from '@nestjs/common';
+import { Controller, Request, Post, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ApiTags } from '@nestjs/swagger';
+
+@ApiTags('auth')
 @Controller()
-@ApiTags('old renderer')
 export class AppController {
-  @Get()
-  @Render('index')
-  root() {
-    return { message: 'Hello world!' };
-  }
-  @Get('regpage')
-  @Render('regpage.hbs')
-  getReg() {
-    return { user: 7232183 };
-  }
-  @Get('regpagebad')
-  @Render('regpage.hbs')
-  getRegUn() {
-    return {};
+  @UseGuards(AuthGuard('local'))
+  @Post('auth/login')
+  async login(@Request() req) {
+    return req.user;
   }
 }
