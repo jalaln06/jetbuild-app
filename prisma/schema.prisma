@@ -11,66 +11,77 @@ datasource db {
 }
 
 model User {
-  id           Int       @id @default(autoincrement())
-  email        String    @unique
-  first_name   String
-  last_name    String
-  login        String    @unique
-  role         Role      @default(WORKER)
-  password     String
-  time_created DateTime  @default(now())
-  Company      Company[]
-  Photo        Photo[]
-  Project      Project[]
+  id             Int              @id @default(autoincrement())
+  email          String           @unique
+  fisrtName      String
+  lastName       String
+  login          String           @unique
+  role           Role             @default(WORKER)
+  password       String
+  timeCreated    DateTime         @default(now())
+  companies      UsersOnCompany[]
+  ownedCompanyId Company?
+  photo          Photo[]
+  projects       Project[]
 }
 
 model Company {
-  id           Int       @id @default(autoincrement())
-  name         String
-  time_created DateTime  @default(now())
-  adress       String
-  city         String
-  country      String
-  owner        User      @relation(fields: [ownerId], references: [id])
-  ownerId      Int
-  Project      Project[]
+  id          Int              @id @default(autoincrement())
+  name        String
+  timeCreated DateTime         @default(now())
+  address     String
+  city        String
+  country     String
+  owner       User             @relation(fields: [ownerId], references: [id])
+  ownerId     Int              @unique
+  users       UsersOnCompany[]
+  Project     Project[]
 }
 
 model Project {
   id           Int      @id @default(autoincrement())
   name         String
-  time_created DateTime @default(now())
+  timeCreated  DateTime @default(now())
   description  String
   company      Company  @relation(fields: [companyId], references: [id])
   companyId    Int
-  Point        Point[]
+  point        Point[]
   projectUsers User[]
 }
 
 model Point {
-  id           Int      @id @default(autoincrement())
-  name         String
-  time_created DateTime @default(now())
-  description  String
-  project      Project  @relation(fields: [projectId], references: [id])
-  projectId    Int
-  Photo        Photo[]
+  id          Int      @id @default(autoincrement())
+  name        String
+  timeCreated DateTime @default(now())
+  description String
+  project     Project  @relation(fields: [projectId], references: [id])
+  projectId   Int
+  photo       Photo[]
 }
 
 model Photo {
-  id           Int      @id @default(autoincrement())
-  name         String
-  time_created DateTime @default(now())
-  description  String
-  point        Point    @relation(fields: [pointId], references: [id])
-  pointId      Int
-  s3_url       String
-  user_took    User     @relation(fields: [userTookId], references: [id])
-  userTookId   Int
+  id          Int      @id @default(autoincrement())
+  name        String
+  timeCreated DateTime @default(now())
+  description String
+  point       Point    @relation(fields: [pointId], references: [id])
+  pointId     Int
+  s3Url       String
+  userTook    User     @relation(fields: [userTookId], references: [id])
+  userTookId  Int
 }
 
 enum Role {
   OWNER
   MANAGER
   WORKER
+}
+
+model UsersOnCompany {
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId Int
+
+  @@id([userId, companyId])
 }

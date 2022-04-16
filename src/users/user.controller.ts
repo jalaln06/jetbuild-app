@@ -9,6 +9,7 @@ import {
   ApiBadRequestResponse,
   ApiConflictResponse,
   ApiOperation,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { PrismaService } from 'prisma/module/prisma.service';
@@ -24,6 +25,10 @@ export class UserController {
   ) {}
 
   @ApiOperation({ summary: 'login user' })
+  @ApiResponse({
+    status: 200,
+    description: 'The record has been successfully created.',
+  })
   @ApiBadRequestResponse({ description: 'User or Passwowrd not found' })
   @Post('/login')
   async loginUser(@Body() user: UserLoginDto) {
