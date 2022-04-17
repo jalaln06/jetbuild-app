@@ -37,8 +37,5 @@ export class UserController {
   @ApiOperation({ summary: 'register user' })
   @ApiConflictResponse({ description: 'User already exists' })
   @Post('/reguser')
-  async createUser(@Body() user: CreateUserDto) {
-    console.log(user);
-    this.userService.createUser(user);
-  }
+  async createUser(@Body() user: CreateUserDto) {}
 }

@@ -10,8 +10,8 @@ import { PrismaService } from 'prisma/module/prisma.service';
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const config = new DocumentBuilder()
-    .setTitle('Api example')
-    .setDescription('JetBuild API description')
+    .setTitle('Jetbuild API')
+    .setDescription('JetBuild API ')
     .setVersion('0.5')
     .build();
   const document = SwaggerModule.createDocument(app, config);

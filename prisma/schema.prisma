@@ -6,47 +6,55 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model User {
-  id             Int              @id @default(autoincrement())
-  email          String           @unique
-  fisrtName      String
-  lastName       String
-  login          String           @unique
-  role           Role             @default(WORKER)
-  password       String
-  timeCreated    DateTime         @default(now())
-  companies      UsersOnCompany[]
-  ownedCompanyId Company?
-  photo          Photo[]
-  projects       Project[]
+  id               Int                @id @default(autoincrement())
+  email            String             @unique
+  fisrtName        String
+  lastName         String
+  login            String             @unique
+  password         String
+  timeCreated      DateTime           @default(now())
+  photos           Photo[]
+  projects         Project[]
+  UsersOnCompanies UsersOnCompanies[]
 }
 
 model Company {
-  id          Int              @id @default(autoincrement())
-  name        String
-  timeCreated DateTime         @default(now())
-  address     String
-  city        String
-  country     String
-  owner       User             @relation(fields: [ownerId], references: [id])
-  ownerId     Int              @unique
-  users       UsersOnCompany[]
-  Project     Project[]
+  id               Int                @id @default(autoincrement())
+  name             String
+  timeCreated      DateTime           @default(now())
+  address          String
+  city             String
+  country          String
+  Project          Project[]
+  UsersOnCompanies UsersOnCompanies[]
+}
+
+model UsersOnCompanies {
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId Int
+  role      Role
+
+  @@id([userId, companyId])
+  @@map("_UsersOnCompanies")
 }
 
 model Project {
-  id           Int      @id @default(autoincrement())
-  name         String
-  timeCreated  DateTime @default(now())
-  description  String
-  company      Company  @relation(fields: [companyId], references: [id])
-  companyId    Int
-  point        Point[]
-  projectUsers User[]
+  id          Int      @id @default(autoincrement())
+  name        String
+  timeCreated DateTime @default(now())
+  description String
+  company     Company  @relation(fields: [companyId], references: [id])
+  companyId   Int
+  point       Point[]
+  users       User[]
 }
 
 model Point {
@@ -56,7 +64,7 @@ model Point {
   description String
   project     Project  @relation(fields: [projectId], references: [id])
   projectId   Int
-  photo       Photo[]
+  photos      Photo[]
 }
 
 model Photo {
@@ -67,21 +75,12 @@ model Photo {
   point       Point    @relation(fields: [pointId], references: [id])
   pointId     Int
   s3Url       String
-  userTook    User     @relation(fields: [userTookId], references: [id])
-  userTookId  Int
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    Int
 }
 
 enum Role {
   OWNER
   MANAGER
   WORKER
-}
-
-model UsersOnCompany {
-  user      User    @relation(fields: [userId], references: [id])
-  userId    Int
-  company   Company @relation(fields: [companyId], references: [id])
-  companyId Int
-
-  @@id([userId, companyId])
 }
