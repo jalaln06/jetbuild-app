@@ -25,6 +25,6 @@ export class PhotoController {
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @Get('/:photoId')
   getPhoto(@Param('photoId') photoId: string) {
-    throw NotImplementedException;
+    throw new NotImplementedException();
   }
 }
