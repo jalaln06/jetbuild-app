@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
@@ -15,7 +16,8 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { PhotosService as PhotoService } from 'src/photo/photos.service';
+import { CreatePhotoDto } from 'src/photo/dto/photo.dto';
+import { PhotoService } from 'src/photo/photo.service';
 import { CreatePointDto } from './dto/point.dto';
 
 @ApiTags('point')
@@ -30,7 +32,7 @@ export class PointController {
   GetAllPhotosFromPoint(@Param('pointId') pointId: string) {
     throw new NotImplementedException();
   }
-  @Post('')
+  @Post()
   @ApiOperation({ summary: 'Create new point' })
   @ApiResponse({
     status: 201,
@@ -39,6 +41,17 @@ export class PointController {
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiBadRequestResponse({ description: 'wrong parameters' })
   CreateNewPoint(@Body() point: CreatePointDto) {
+    throw new NotImplementedException();
+  }
+  @ApiOperation({ summary: 'upload photo' })
+  @ApiCreatedResponse({ description: 'Photo Succesfully added' })
+  @ApiBadRequestResponse({ description: 'Photo not working' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @Post('/:pointId')
+  uploadPhoto(
+    @Body() photo: CreatePhotoDto,
+    @Param('pointId') pointId: string,
+  ) {
     throw new NotImplementedException();
   }
 }

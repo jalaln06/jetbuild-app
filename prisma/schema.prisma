@@ -27,6 +27,7 @@ model User {
 model Company {
   id               Int                @id @default(autoincrement())
   name             String
+  description      String
   timeCreated      DateTime           @default(now())
   address          String
   city             String

@@ -4,10 +4,13 @@ import {
   Post,
   Body,
   NotImplementedException,
+  Param,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
+  ApiForbiddenResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -37,5 +40,15 @@ export class UserController {
   @ApiOperation({ summary: 'register user' })
   @ApiConflictResponse({ description: 'User already exists' })
   @Post('/reguser')
-  async createUser(@Body() user: CreateUserDto) {}
+  async createUser(@Body() user: CreateUserDto) {
+    throw new NotImplementedException();
+  }
+  @Get('/:userId/photos')
+  @ApiOperation({ summary: 'Take All Photos from one user' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiOkResponse({})
+  @ApiBadRequestResponse({ description: 'Photos not found' })
+  async GetAllPhotosFromUser(@Param('userId') userId: string) {
+    throw new NotImplementedException();
+  }
 }

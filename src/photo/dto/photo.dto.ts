@@ -9,4 +9,6 @@ export class CreatePhotoDto {
   user_id: number;
   @ApiProperty({ description: 'pointId', example: 'johnatdude06' })
   point_id: number;
+  @ApiProperty({ description: 'Photo byte array', example: 'some photo' })
+  byte_array: string;
 }

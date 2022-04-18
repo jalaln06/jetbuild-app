@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { PhotoController } from './photo.controller';
-import { PhotosService } from './photos.service';
+import { PhotoService as PhotoService } from './photo.service';
 
 @Module({
   controllers: [PhotoController],
-  providers: [PhotosService],
-  exports: [PhotosService],
+  providers: [PhotoService],
+  exports: [PhotoService],
 })
 export class PhotoModule {}
