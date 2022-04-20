@@ -4,6 +4,7 @@ import {
   Get,
   NotImplementedException,
   Param,
+  ParseIntPipe,
   Post,
 } from '@nestjs/common';
 import {
@@ -15,24 +16,28 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateProjectDto } from './dto/project.dto';
+import { ProjectService } from './project.service';
 
 @ApiTags('projects')
 @Controller('project')
 export class ProjectController {
-  @Get('/:companyId')
-  getProjectsByCompanyId() {
-    throw new NotImplementedException();
-  }
-  @Post('')
-  @ApiOperation({ summary: 'Create new point' })
+  constructor(private projectService: ProjectService) {}
+  @Post('/:companyId')
+  @ApiOperation({ summary: 'Create new project' })
   @ApiResponse({
     status: 201,
     description: 'Created',
   })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiBadRequestResponse({ description: 'wrong parameters' })
-  CreateNewProject(@Body() point: CreateProjectDto) {
-    throw new NotImplementedException();
+  CreateNewProject(
+    @Body() project: CreateProjectDto,
+    @Param('companyId', ParseIntPipe) companyId: number,
+  ) {
+    try {
+      console.log(typeof companyId);
+      this.projectService.createProject(project, companyId);
+    } catch (error) {}
   }
   @Post('/:projectId/user/:userId')
   @ApiOperation({ summary: 'assign user to company' })
@@ -40,8 +45,8 @@ export class ProjectController {
   @ApiBadRequestResponse({ description: 'Project not found' })
   @ApiBadRequestResponse({ description: 'User not found' })
   addUserToProject(
-    @Param('projectId') projectId: string,
-    @Param('userId') userId: string,
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('userId', ParseIntPipe) userId: number,
   ) {
     throw new NotImplementedException();
   }
@@ -50,7 +55,7 @@ export class ProjectController {
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiOkResponse({})
   @ApiBadRequestResponse({ description: 'Photos not found' })
-  GetAllPhotosFromProject(@Param('projectId') projectId: string) {
+  GetAllPhotosFromProject(@Param('projectId', ParseIntPipe) projectId: number) {
     throw new NotImplementedException();
   }
 }

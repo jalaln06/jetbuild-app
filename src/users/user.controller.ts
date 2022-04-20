@@ -5,7 +5,10 @@ import {
   Body,
   NotImplementedException,
   Param,
+  UseGuards,
+  Session,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
@@ -16,6 +19,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { PrismaService } from 'prisma/module/prisma.service';
+import { SessionContainer } from 'supertokens-node/recipe/session';
 import { CreateUserDto, UserLoginDto } from './dto/user.dto';
 import { UserService } from './user.service';
 

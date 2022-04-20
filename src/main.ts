@@ -5,7 +5,6 @@ import { AppModule } from './app.module';
 import * as hbs from 'hbs';
 import { DocumentBuilder } from '@nestjs/swagger/dist/document-builder';
 import { SwaggerModule } from '@nestjs/swagger';
-import { PrismaService } from 'prisma/module/prisma.service';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -14,6 +13,7 @@ async function bootstrap(): Promise<void> {
     .setDescription('JetBuild API ')
     .setVersion('0.5')
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   app.useStaticAssets(join(__dirname, '..', 'public'));

@@ -8,6 +8,7 @@ import { PrismaModule } from 'prisma/module/prisma.module';
 import { PrismaClientValidationError } from '@prisma/client/runtime';
 import { PrismaService } from 'prisma/module/prisma.service';
 import { PrismaClient } from '@prisma/client';
+import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     UsersModule,
@@ -17,6 +18,7 @@ import { PrismaClient } from '@prisma/client';
     CompaniesModule,
     PrismaService,
     PrismaModule,
+    ConfigModule.forRoot(),
   ],
   controllers: [],
   providers: [],
