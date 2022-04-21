@@ -9,9 +9,9 @@ export class UserLoginDto {
 
 export class CreateUserDto {
   @ApiProperty({ description: 'First name', example: 'John' })
-  first_name: string;
+  firstName: string;
   @ApiProperty({ description: 'Last name', example: 'Doe' })
-  last_name: string;
+  lastName: string;
   @ApiProperty({ description: 'user login', example: 'johnatdude06' })
   login: string;
   @ApiProperty({ description: 'user password', example: '12345' })

@@ -35,12 +35,11 @@ export class ProjectController {
     @Param('companyId', ParseIntPipe) companyId: number,
   ) {
     try {
-      console.log(typeof companyId);
       this.projectService.createProject(project, companyId);
     } catch (error) {}
   }
   @Post('/:projectId/user/:userId')
-  @ApiOperation({ summary: 'assign user to company' })
+  @ApiOperation({ summary: 'assign user to project' })
   @ApiForbiddenResponse({ description: 'You have no rights to write here' })
   @ApiBadRequestResponse({ description: 'Project not found' })
   @ApiBadRequestResponse({ description: 'User not found' })

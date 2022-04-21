@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,28 +9,28 @@ datasource db {
 }
 
 model User {
-  id               Int                @id @default(autoincrement())
-  email            String             @unique
-  fisrtName        String
-  lastName         String
-  login            String             @unique
-  password         String
-  timeCreated      DateTime           @default(now())
-  photos           Photo[]
-  projects         Project[]
-  UsersOnCompanies UsersOnCompanies[]
+  id          Int                @id @default(autoincrement())
+  email       String             @unique
+  firstName   String
+  lastName    String
+  login       String             @unique
+  password    String
+  timeCreated DateTime           @default(now())
+  photos      Photo[]
+  projects    Project[]
+  companies   UsersOnCompanies[]
 }
 
 model Company {
-  id               Int                @id @default(autoincrement())
-  name             String
-  description      String
-  timeCreated      DateTime           @default(now())
-  address          String
-  city             String
-  country          String
-  Project          Project[]
-  UsersOnCompanies UsersOnCompanies[]
+  id          Int                @id @default(autoincrement())
+  name        String
+  timeCreated DateTime           @default(now())
+  address     String
+  city        String
+  country     String
+  description String
+  projects    Project[]
+  users       UsersOnCompanies[]
 }
 
 model UsersOnCompanies {
@@ -54,7 +51,7 @@ model Project {
   description String
   company     Company  @relation(fields: [companyId], references: [id])
   companyId   Int
-  point       Point[]
+  points      Point[]
   users       User[]
 }
 

@@ -19,7 +19,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { PrismaService } from 'prisma/module/prisma.service';
-import { SessionContainer } from 'supertokens-node/recipe/session';
 import { CreateUserDto, UserLoginDto } from './dto/user.dto';
 import { UserService } from './user.service';
 
@@ -45,7 +44,9 @@ export class UserController {
   @ApiConflictResponse({ description: 'User already exists' })
   @Post('/reguser')
   async createUser(@Body() user: CreateUserDto) {
-    throw new NotImplementedException();
+    try {
+      this.userService.createUser(user);
+    } catch (error) {}
   }
   @Get('/:userId/photos')
   @ApiOperation({ summary: 'Take All Photos from one user' })

@@ -17,4 +17,11 @@ export class ProjectService {
     });
     return createProject;
   }
+  async getAllProjectsFromCompany(companyId: number) {
+    return await this.prisma.project.findMany({
+      where: {
+        companyId: companyId,
+      },
+    });
+  }
 }

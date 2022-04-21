@@ -5,4 +5,6 @@ export class CreatePointDto {
   name: string;
   @ApiProperty({ description: ' Description of point', example: 'Doe' })
   description: string;
+  @ApiProperty({ description: 'Project Id', example: '1' })
+  projectId: number;
 }

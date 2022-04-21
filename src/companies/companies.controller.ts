@@ -4,6 +4,7 @@ import {
   Get,
   NotImplementedException,
   Param,
+  ParseIntPipe,
   Post,
 } from '@nestjs/common';
 import {
@@ -14,30 +15,36 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Role } from '@prisma/client';
+import { ProjectService } from 'src/project/project.service';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/company.dto';
 
 @ApiTags('companies')
 @Controller('companies')
 export class CompaniesController {
-  constructor(private companiesService: CompaniesService) {}
+  constructor(
+    private companiesService: CompaniesService,
+    private projectService: ProjectService,
+  ) {}
   @Post('')
-  @ApiOperation({ summary: 'Create new point' })
+  @ApiOperation({ summary: 'Create new company' })
   @ApiResponse({
     status: 201,
     description: 'Created',
   })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiBadRequestResponse({ description: 'wrong parameters' })
-  CreateNewCompany(@Body() company: CreateCompanyDto) {
+  async CreateNewCompany(@Body() company: CreateCompanyDto) {
     try {
-      return this.companiesService.createCompany(company);
+      const comp = await this.companiesService.createCompany(company);
+      this.companiesService.asignUserToCompany(1, comp.id, 'OWNER');
     } catch (error) {}
   }
   @Get('/:companyId')
   @ApiOperation({ summary: 'Get company by Id' })
   @ApiBadRequestResponse({ description: 'Company not found' })
-  GetCompany(@Param('companyId') companyId: number) {
+  GetCompany(@Param('companyId', ParseIntPipe) companyId: number) {
     try {
       return this.companiesService.getCompanyById(companyId);
     } catch (error) {}
@@ -48,22 +55,29 @@ export class CompaniesController {
   @ApiBadRequestResponse({ description: 'User not found' })
   @Post('/:companyId/user/:userId')
   addUserToCompany(
-    @Param('userId') userId: number,
-    @Param('companyId') companyId: number,
+    @Param('userId', ParseIntPipe) userId: number,
+    @Param('companyId', ParseIntPipe) companyId: number,
+    @Body('role') role: Role,
   ) {
-    throw new NotImplementedException();
+    try {
+      this.companiesService.asignUserToCompany(userId, companyId, 'WORKER');
+    } catch (error) {}
   }
   @Get('/:companyId/photos')
   @ApiOperation({ summary: 'Take All Photos from one company' })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiOkResponse({})
   @ApiBadRequestResponse({ description: 'Photos not found' })
-  GetAllPhotosFromCompany(@Param('companyId') companyId: string) {
+  GetAllPhotosFromCompany(@Param('companyId', ParseIntPipe) companyId: number) {
     throw new NotImplementedException();
   }
   @Get('/:companyId/projects')
   @ApiOperation({ summary: 'Get all projects from company' })
-  GetAllProjectsFromCompany() {
-    throw new NotImplementedException();
+  @ApiBadRequestResponse({ description: 'No such company' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  async GetAllProjectsFromCompany(
+    @Param('companyId', ParseIntPipe) companyId: number,
+  ) {
+    console.log(await this.projectService.getAllProjectsFromCompany(companyId));
   }
 }
