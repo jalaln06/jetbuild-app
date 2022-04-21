@@ -78,6 +78,6 @@ export class CompaniesController {
   async GetAllProjectsFromCompany(
     @Param('companyId', ParseIntPipe) companyId: number,
   ) {
-    console.log(await this.projectService.getAllProjectsFromCompany(companyId));
+    await this.projectService.getAllProjectsFromCompany(companyId);
   }
 }

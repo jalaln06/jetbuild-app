@@ -11,4 +11,11 @@ export class UserService {
       data,
     });
   }
+  async findUser(username: string): Promise<User | undefined> {
+    return this.prisma.user.findUnique({
+      where: {
+        login: username,
+      },
+    });
+  }
 }

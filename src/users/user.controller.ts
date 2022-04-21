@@ -7,6 +7,8 @@ import {
   Param,
   UseGuards,
   Session,
+  Request,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
@@ -29,7 +31,6 @@ export class UserController {
     private readonly prisma: PrismaService,
     private readonly userService: UserService,
   ) {}
-
   @ApiOperation({ summary: 'login user' })
   @ApiResponse({
     status: 200,
@@ -53,7 +54,15 @@ export class UserController {
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiOkResponse({})
   @ApiBadRequestResponse({ description: 'Photos not found' })
-  async GetAllPhotosFromUser(@Param('userId') userId: string) {
+  async GetAllPhotosFromUser(@Param('userId') userId: number) {
     throw new NotImplementedException();
+  }
+  @Get('/:login')
+  @ApiOperation({ summary: 'Get User info' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiOkResponse({})
+  @ApiBadRequestResponse({ description: 'Photos not found' })
+  async GetUser(@Param('login') login: string) {
+    return this.userService.findUser(login);
   }
 }

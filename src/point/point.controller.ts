@@ -36,7 +36,7 @@ export class PointController {
   GetAllPhotosFromPoint(@Param('pointId') pointId: string) {
     throw new NotImplementedException();
   }
-  @Post()
+  @Post('/create')
   @ApiOperation({ summary: 'Create new point' })
   @ApiResponse({
     status: 201,
