@@ -5,10 +5,9 @@ import { PhotoModule } from './photo/photo.module';
 import { CompaniesModule } from './companies/companies.module';
 import { UsersModule } from './users/user.module';
 import { PrismaModule } from 'prisma/module/prisma.module';
-import { PrismaClientValidationError } from '@prisma/client/runtime';
 import { PrismaService } from 'prisma/module/prisma.service';
-import { PrismaClient } from '@prisma/client';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     UsersModule,
@@ -21,6 +20,7 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    AuthModule,
   ],
   controllers: [],
   providers: [],

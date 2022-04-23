@@ -63,6 +63,6 @@ export class UserController {
   @ApiOkResponse({})
   @ApiBadRequestResponse({ description: 'Photos not found' })
   async GetUser(@Param('login') login: string) {
-    return this.userService.findUser(login);
+    return this.userService.getUser(login);
   }
 }
