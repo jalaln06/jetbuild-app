@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { AuthResponse } from './dto/auth-response.dto';
 import { CreateUserDto } from 'src/users/dto/user.dto';
 import { UserService } from 'src/users/user.service';
+import { prisma } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -45,6 +46,20 @@ export class AuthService {
   }
 
   async register(createUserDto: CreateUserDto): Promise<AuthResponse> {
+    const result = await this.prismaService.user.findUnique({
+      where: { login: createUserDto.login },
+    });
+    if (result) {
+      throw new NotFoundException('login already taken');
+    }
+    const eresult = await this.prismaService.user.findUnique({
+      where: { login: createUserDto.login },
+    });
+
+    if (eresult) {
+      throw new NotFoundException('email already taken');
+    }
+
     const user = await this.usersService.createUser(createUserDto);
     return {
       token: this.jwtService.sign({ login: user.login }),
