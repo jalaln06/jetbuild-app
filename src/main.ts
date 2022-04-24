@@ -20,7 +20,7 @@ async function bootstrap(): Promise<void> {
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
 
   app.setViewEngine('hbs');
-
+  app.enableCors();
   hbs.registerPartials(join(__dirname, '..', 'views/partials'));
   await app.listen(process.env.PORT || 3020);
   console.log(`Application is running on: ${await app.getUrl()}`);
