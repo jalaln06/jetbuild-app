@@ -43,7 +43,7 @@ export class CompaniesController {
   ) {
     try {
       const comp = await this.companiesService.createCompany(company);
-      this.companiesService.asignUserToCompany(user.id, comp.id, 'OWNER');
+      await this.companiesService.asignUserToCompany(user.id, comp.id, 'OWNER');
     } catch (error) {}
   }
   @Get('/:companyId')

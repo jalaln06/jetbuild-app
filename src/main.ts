@@ -5,6 +5,8 @@ import { AppModule } from './app.module';
 import * as hbs from 'hbs';
 import { DocumentBuilder } from '@nestjs/swagger/dist/document-builder';
 import { SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
+import { triggerAsyncId } from 'async_hooks';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -13,7 +15,14 @@ async function bootstrap(): Promise<void> {
     .setDescription('JetBuild API ')
     .setVersion('0.5')
     .build();
-
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      disableErrorMessages: false,
+    }),
+  );
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   app.useStaticAssets(join(__dirname, '..', 'public'));
