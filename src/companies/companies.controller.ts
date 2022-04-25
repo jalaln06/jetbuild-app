@@ -37,10 +37,13 @@ export class CompaniesController {
   })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiBadRequestResponse({ description: 'wrong parameters' })
-  async CreateNewCompany(@Body() company: CreateCompanyDto) {
+  async CreateNewCompany(
+    @Body() company: CreateCompanyDto,
+    @AuthUser() user: User,
+  ) {
     try {
       const comp = await this.companiesService.createCompany(company);
-      this.companiesService.asignUserToCompany(1, comp.id, 'OWNER');
+      this.companiesService.asignUserToCompany(user.id, comp.id, 'OWNER');
     } catch (error) {}
   }
   @Get('/:companyId')
