@@ -7,6 +7,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -37,11 +38,14 @@ export class CompaniesController {
   })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiBadRequestResponse({ description: 'wrong parameters' })
+  @UseGuards(AuthUser('jwt'))
   async CreateNewCompany(
     @Body() company: CreateCompanyDto,
     @AuthUser() user: User,
   ) {
     try {
+      console.log(company);
+      console.log(user);
       const comp = await this.companiesService.createCompany(company);
       await this.companiesService.asignUserToCompany(user.id, comp.id, 'OWNER');
     } catch (error) {}
