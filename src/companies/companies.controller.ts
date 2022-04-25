@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   NotImplementedException,
   Param,
@@ -15,7 +16,8 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Role } from '@prisma/client';
+import { Role, User } from '@prisma/client';
+import AuthUser from 'src/auth/auth-user.decorator';
 import { ProjectService } from 'src/project/project.service';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/company.dto';
@@ -78,6 +80,13 @@ export class CompaniesController {
   async GetAllProjectsFromCompany(
     @Param('companyId', ParseIntPipe) companyId: number,
   ) {
-    await this.projectService.getAllProjectsFromCompany(companyId);
+    return await this.projectService.getAllProjectsFromCompany(companyId);
+  }
+  @Delete('/:companyId')
+  async deleteCompany(
+    @Param('companyId', ParseIntPipe) companyId: number,
+    @AuthUser() user: User,
+  ) {
+    this.companiesService.deleteCompanyById(companyId, user);
   }
 }

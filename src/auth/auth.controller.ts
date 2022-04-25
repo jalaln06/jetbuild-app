@@ -12,18 +12,18 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('/login')
-  login(@Body() loginDto: LoginDto): Promise<AuthResponse> {
-    return this.authService.login(loginDto);
+  async login(@Body() loginDto: LoginDto): Promise<AuthResponse> {
+    return await this.authService.login(loginDto);
   }
 
   @Post('/register')
-  register(@Body() createUserDto: CreateUserDto): Promise<AuthResponse> {
-    return this.authService.register(createUserDto);
+  async register(@Body() createUserDto: CreateUserDto): Promise<AuthResponse> {
+    return await this.authService.register(createUserDto);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Get('/profile')
-  getLoggedUser(@AuthUser() user: User): User {
-    return user;
+  async getCompaniesList(@AuthUser() user: User): Promise<User> {
+    return await user;
   }
 }

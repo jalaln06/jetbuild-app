@@ -20,7 +20,10 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { User } from '@prisma/client';
 import { PrismaService } from 'prisma/module/prisma.service';
+import AuthUser from 'src/auth/auth-user.decorator';
+import { CompaniesService } from 'src/companies/companies.service';
 import { CreateUserDto, UserLoginDto } from './dto/user.dto';
 import { UserService } from './user.service';
 
@@ -30,6 +33,7 @@ export class UserController {
   constructor(
     private readonly prisma: PrismaService,
     private readonly userService: UserService,
+    private readonly companiesService: CompaniesService,
   ) {}
   @ApiOperation({ summary: 'login user' })
   @ApiResponse({
@@ -49,6 +53,13 @@ export class UserController {
       this.userService.createUser(user);
     } catch (error) {}
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/companieslist')
+  async getCompaniesList(@AuthUser() user: User) {
+    return await this.companiesService.getCompanieslist(user.id);
+  }
+
   @Get('/:userId/photos')
   @ApiOperation({ summary: 'Take All Photos from one user' })
   @ApiForbiddenResponse({ description: 'Forbidden' })

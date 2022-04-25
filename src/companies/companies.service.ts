@@ -1,9 +1,39 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Company, Prisma, Role, User } from '@prisma/client';
 import { PrismaService } from 'prisma/module/prisma.service';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class CompaniesService {
+  async deleteCompanyById(companyId: number, user: User) {
+    throw new Error('Method not implemented.');
+    this.checkOwnership(companyId, user);
+  }
+  async checkOwnership(companyId: number, user: User) {
+    const userId = user.id;
+    const rel = await this.prisma.usersOnCompanies.findUnique({
+      where: {
+        userId_companyId: { companyId, userId },
+      },
+    });
+    if (!rel) {
+      throw new NotFoundException();
+    }
+    return rel.role === 'OWNER';
+  }
+  async getCompanieslist(id: number) {
+    const res = [];
+    const ids = await this.getCompaniesIdsByUserId(id);
+    for (let index = 0; index < ids.length; index++) {
+      res.push(await this.getCompanyById(ids[index].companyId));
+    }
+    return res;
+  }
   constructor(private prisma: PrismaService) {}
 
   async createCompany(data: Prisma.CompanyCreateInput): Promise<Company> {
@@ -50,5 +80,15 @@ export class CompaniesService {
     await this.prisma.usersOnCompanies.create({
       data: { userId: userId, companyId: companyId, role: Role },
     });
+  }
+  async getCompaniesIdsByUserId(userId: number) {
+    const result = await this.prisma.usersOnCompanies.findMany({
+      where: { userId: userId },
+      select: { companyId: true },
+    });
+    if (!result) {
+      throw new NotFoundException("error User don't have companies");
+    }
+    return await result;
   }
 }

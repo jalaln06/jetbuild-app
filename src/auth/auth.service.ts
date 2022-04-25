@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -21,10 +22,10 @@ export class AuthService {
   ) {}
 
   async login(loginDto: LoginDto): Promise<AuthResponse> {
-    const { username, password } = loginDto;
+    const { login, password } = loginDto;
 
     const user = await this.prismaService.user.findUnique({
-      where: { login: loginDto.username },
+      where: { login: loginDto.login },
     });
 
     if (!user) {
@@ -39,7 +40,7 @@ export class AuthService {
 
     return {
       token: this.jwtService.sign({
-        username,
+        login,
       }),
       user,
     };
@@ -50,14 +51,14 @@ export class AuthService {
       where: { login: createUserDto.login },
     });
     if (result) {
-      throw new NotFoundException('login already taken');
+      throw new ConflictException('login already taken');
     }
     const eresult = await this.prismaService.user.findUnique({
-      where: { login: createUserDto.login },
+      where: { email: createUserDto.email },
     });
 
     if (eresult) {
-      throw new NotFoundException('email already taken');
+      throw new ConflictException('email already taken');
     }
 
     const user = await this.usersService.createUser(createUserDto);
