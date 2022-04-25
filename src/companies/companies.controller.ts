@@ -9,6 +9,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBadRequestResponse,
   ApiForbiddenResponse,
@@ -38,7 +39,7 @@ export class CompaniesController {
   })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiBadRequestResponse({ description: 'wrong parameters' })
-  @UseGuards(AuthUser('jwt'))
+  @UseGuards(AuthGuard('jwt'))
   async CreateNewCompany(
     @Body() company: CreateCompanyDto,
     @AuthUser() user: User,
