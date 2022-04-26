@@ -12,7 +12,9 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiForbiddenResponse,
+  ApiHideProperty,
   ApiOkResponse,
   ApiOperation,
   ApiResponse,
@@ -23,7 +25,7 @@ import AuthUser from 'src/auth/auth-user.decorator';
 import { ProjectService } from 'src/project/project.service';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/company.dto';
-
+@ApiBearerAuth()
 @ApiTags('companies')
 @Controller('companies')
 export class CompaniesController {
@@ -90,6 +92,7 @@ export class CompaniesController {
   ) {
     return await this.projectService.getAllProjectsFromCompany(companyId);
   }
+  @ApiHideProperty()
   @Delete('/:companyId')
   async deleteCompany(
     @Param('companyId', ParseIntPipe) companyId: number,

@@ -14,6 +14,7 @@ async function bootstrap(): Promise<void> {
     .setTitle('Jetbuild API')
     .setDescription('JetBuild API ')
     .setVersion('0.5')
+    .addBearerAuth()
     .build();
   app.useGlobalPipes(
     new ValidationPipe({

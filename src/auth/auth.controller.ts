@@ -6,24 +6,31 @@ import { User } from '.prisma/client';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateUserDto } from 'src/users/dto/user.dto';
 import AuthUser from './auth-user.decorator';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiConflictResponse,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
+  @ApiOperation({ summary: 'login user' })
+  @ApiResponse({
+    status: 200,
+    description: 'Succesfully logged in',
+  })
+  @ApiBadRequestResponse({ description: 'User or Passwowrd not found' })
   @Post('/login')
   async login(@Body() loginDto: LoginDto): Promise<AuthResponse> {
     return await this.authService.login(loginDto);
   }
-
+  @ApiOperation({ summary: 'register user' })
+  @ApiConflictResponse({ description: 'User already exists' })
   @Post('/register')
   async register(@Body() createUserDto: CreateUserDto): Promise<AuthResponse> {
     return await this.authService.register(createUserDto);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Get('/profile')
-  async getCompaniesList(@AuthUser() user: User): Promise<User> {
-    return await user;
   }
 }

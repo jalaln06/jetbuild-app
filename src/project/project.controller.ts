@@ -9,19 +9,25 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { unwatchFile } from 'fs';
+import { PointService } from 'src/point/point.service';
 import { CreateProjectDto } from './dto/project.dto';
 import { ProjectService } from './project.service';
-
+@ApiBearerAuth()
 @ApiTags('projects')
 @Controller('project')
 export class ProjectController {
-  constructor(private projectService: ProjectService) {}
+  constructor(
+    private projectService: ProjectService,
+    private pointService: PointService,
+  ) {}
   @Post('/:companyId')
   @ApiOperation({ summary: 'Create new project' })
   @ApiResponse({
@@ -56,5 +62,13 @@ export class ProjectController {
   @ApiBadRequestResponse({ description: 'Photos not found' })
   GetAllPhotosFromProject(@Param('projectId', ParseIntPipe) projectId: number) {
     throw new NotImplementedException();
+  }
+  @Get('/:projectId/points')
+  @ApiOperation({ summary: 'Take All Points from one project' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiOkResponse({})
+  @ApiBadRequestResponse({ description: 'Points not found' })
+  GetAllPhotosFromPoint(@Param('projectId', ParseIntPipe) projectId: number) {
+    this.pointService.getPointsFromProject(projectId);
   }
 }

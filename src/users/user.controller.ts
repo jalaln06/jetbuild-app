@@ -13,6 +13,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiConflictResponse,
   ApiForbiddenResponse,
   ApiOkResponse,
@@ -26,7 +27,7 @@ import AuthUser from 'src/auth/auth-user.decorator';
 import { CompaniesService } from 'src/companies/companies.service';
 import { CreateUserDto, UserLoginDto } from './dto/user.dto';
 import { UserService } from './user.service';
-
+@ApiBearerAuth()
 @ApiTags('users')
 @Controller('user')
 export class UserController {
@@ -35,24 +36,6 @@ export class UserController {
     private readonly userService: UserService,
     private readonly companiesService: CompaniesService,
   ) {}
-  @ApiOperation({ summary: 'login user' })
-  @ApiResponse({
-    status: 200,
-    description: 'The record has been successfully created.',
-  })
-  @ApiBadRequestResponse({ description: 'User or Passwowrd not found' })
-  @Post('/login')
-  async loginUser(@Body() user: UserLoginDto) {
-    throw new NotImplementedException();
-  }
-  @ApiOperation({ summary: 'register user' })
-  @ApiConflictResponse({ description: 'User already exists' })
-  @Post('/reguser')
-  async createUser(@Body() user: CreateUserDto) {
-    try {
-      this.userService.createUser(user);
-    } catch (error) {}
-  }
 
   @UseGuards(AuthGuard('jwt'))
   @Get('/companieslist')

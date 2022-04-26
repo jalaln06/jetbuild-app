@@ -12,6 +12,7 @@ import { InstanceLoader } from '@nestjs/core/injector/instance-loader';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiForbiddenResponse,
@@ -21,7 +22,7 @@ import {
 } from '@nestjs/swagger';
 import { PhotoService } from './photo.service';
 import { S3Service } from './s3.service';
-
+@ApiBearerAuth()
 @ApiTags('photos')
 @Controller('photo')
 export class PhotoController {

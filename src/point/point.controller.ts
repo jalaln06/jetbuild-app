@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiOkResponse,
@@ -20,7 +21,7 @@ import { CreatePhotoDto } from 'src/photo/dto/photo.dto';
 import { PhotoService } from 'src/photo/photo.service';
 import { CreatePointDto } from './dto/point.dto';
 import { PointService } from './point.service';
-
+@ApiBearerAuth()
 @ApiTags('point')
 @Controller('point')
 export class PointController {
