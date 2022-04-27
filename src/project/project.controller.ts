@@ -69,6 +69,6 @@ export class ProjectController {
   @ApiOkResponse({})
   @ApiBadRequestResponse({ description: 'Points not found' })
   GetAllPhotosFromPoint(@Param('projectId', ParseIntPipe) projectId: number) {
-    this.pointService.getPointsFromProject(projectId);
+    return this.pointService.getPointsFromProject(projectId);
   }
 }
