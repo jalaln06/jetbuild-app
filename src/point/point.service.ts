@@ -14,6 +14,7 @@ export class PointService {
   }
   constructor(private prisma: PrismaService) {}
   async createPoint(data: CreatePointDto) {
+    console.log(data);
     return await this.prisma.point.create({
       data,
     });

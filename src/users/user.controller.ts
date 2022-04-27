@@ -51,12 +51,4 @@ export class UserController {
   async GetAllPhotosFromUser(@Param('userId') userId: number) {
     throw new NotImplementedException();
   }
-  @Get('/:login')
-  @ApiOperation({ summary: 'Get User info' })
-  @ApiForbiddenResponse({ description: 'Forbidden' })
-  @ApiOkResponse({})
-  @ApiBadRequestResponse({ description: 'Photos not found' })
-  async GetUser(@Param('login') login: string) {
-    return this.userService.getUser(login);
-  }
 }

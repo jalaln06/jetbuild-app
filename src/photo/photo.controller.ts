@@ -4,6 +4,7 @@ import {
   Get,
   NotImplementedException,
   Param,
+  ParseIntPipe,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -20,6 +21,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { CreatePhotoDto } from './dto/photo.dto';
 import { PhotoService } from './photo.service';
 import { S3Service } from './s3.service';
 @ApiBearerAuth()
@@ -34,26 +36,7 @@ export class PhotoController {
   @ApiBadRequestResponse({ description: 'Photo not found' })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @Get('/:photoId')
-  getPhoto(@Param('photoId') photoId: string) {
-    throw new NotImplementedException();
-  }
-
-  @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        file: {
-          // 👈 this property
-          type: 'string',
-          format: 'binary',
-        },
-      },
-    },
-  })
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
-    this.s3Service.uploadPhoto(file.buffer);
+  async getPhoto(@Param('photoId', ParseIntPipe) photoId: number) {
+    return await this.photoService.getPhoto(photoId);
   }
 }
