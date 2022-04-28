@@ -26,6 +26,7 @@ export class AuthController {
   @ApiBadRequestResponse({ description: 'User or Password not found' })
   @Post('/login')
   async login(@Body() loginDto: LoginDto): Promise<AuthResponse> {
+    console.log(loginDto);
     return await this.authService.login(loginDto);
   }
   @ApiOperation({ summary: 'register user' })

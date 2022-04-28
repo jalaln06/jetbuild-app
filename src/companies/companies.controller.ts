@@ -20,7 +20,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Role, User } from '@prisma/client';
+import { Role, User, Company, prisma } from '@prisma/client';
 import AuthUser from 'src/auth/auth-user.decorator';
 import { ProjectService } from 'src/project/project.service';
 import { CompaniesService } from './companies.service';
@@ -55,9 +55,14 @@ export class CompaniesController {
     } catch (error) {}
   }
   @Get('/:companyId')
+  @ApiOkResponse({
+    description: 'returns company by Id',
+  })
   @ApiOperation({ summary: 'Get company by Id' })
   @ApiBadRequestResponse({ description: 'Company not found' })
-  GetCompany(@Param('companyId', ParseIntPipe) companyId: number) {
+  GetCompany(
+    @Param('companyId', ParseIntPipe) companyId: number,
+  ): Promise<Company> {
     try {
       return this.companiesService.getCompanyById(companyId);
     } catch (error) {}

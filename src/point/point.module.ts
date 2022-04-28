@@ -8,7 +8,7 @@ import { PointService } from './point.service';
 @Module({
   imports: [PrismaModule],
   controllers: [PointController],
-  providers: [PointService, PhotoService, S3Service, PrismaModule],
+  providers: [PointService, PhotoService, S3Service],
   exports: [PointService],
 })
 export class PointModule {}

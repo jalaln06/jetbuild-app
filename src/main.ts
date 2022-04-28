@@ -26,15 +26,10 @@ async function bootstrap(): Promise<void> {
     }),
   );
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('', app, document);
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
-  app.useStaticAssets(join(__dirname, '..', 'public'));
-  app.setBaseViewsDir(join(__dirname, '..', 'views'));
-
-  app.setViewEngine('hbs');
   app.enableCors();
-  hbs.registerPartials(join(__dirname, '..', 'views/partials'));
   await app.listen(process.env.PORT || 3020);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
