@@ -23,7 +23,6 @@ export class AuthGuard implements CanActivate {
       console.log('Something went wrong');
       throw new UnauthorizedException('invalid token');
     }
-    console.log('zaebis vse');
     return true;
   }
 }

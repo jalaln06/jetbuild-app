@@ -5,7 +5,9 @@ import AWS, { S3 } from 'aws-sdk';
 export class S3Service {
   s3: any;
   constructor() {
-    this.s3 = new S3({ endpoint: 'https://hb.bizmrg.com' });
+    this.s3 = new S3({
+      endpoint: 'https://hb.bizmrg.com',
+    });
   }
   async uploadPhotoToS3(imagebuffer: Buffer, key: number) {
     const ky = key.toString();
