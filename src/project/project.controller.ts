@@ -6,7 +6,9 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -29,6 +31,7 @@ export class ProjectController {
     private pointService: PointService,
   ) {}
   @Post('/:companyId')
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Create new project' })
   @ApiResponse({
     status: 201,
@@ -45,6 +48,7 @@ export class ProjectController {
     } catch (error) {}
   }
   @Post('/:projectId/user/:userId')
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'assign user to project' })
   @ApiForbiddenResponse({ description: 'You have no rights to write here' })
   @ApiBadRequestResponse({ description: 'Project not found' })
@@ -56,6 +60,7 @@ export class ProjectController {
     throw new NotImplementedException();
   }
   @Get('/:projectId/photos')
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Take All Photos from one project' })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiOkResponse({})
@@ -64,6 +69,7 @@ export class ProjectController {
     throw new NotImplementedException();
   }
   @Get('/:projectId/points')
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Take All Points from one project' })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiOkResponse({})

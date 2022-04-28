@@ -45,7 +45,7 @@ export class PointController {
   @Get('/:pointId/photos')
   @ApiOperation({ summary: 'Take All Photos from one point' })
   @ApiForbiddenResponse({ description: 'Forbidden' })
-  @ApiOkResponse({})
+  @ApiOkResponse({ description: 'Returns array of points' })
   @ApiBadRequestResponse({ description: 'Photos not found' })
   async GetAllPhotosFromPoint(@Param('pointId', ParseIntPipe) pointId: number) {
     return await this.photoService.getPhotosFromPoint(pointId);

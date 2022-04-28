@@ -23,7 +23,7 @@ export class AuthController {
     status: 200,
     description: 'Succesfully logged in',
   })
-  @ApiBadRequestResponse({ description: 'User or Passwowrd not found' })
+  @ApiBadRequestResponse({ description: 'User or Password not found' })
   @Post('/login')
   async login(@Body() loginDto: LoginDto): Promise<AuthResponse> {
     return await this.authService.login(loginDto);

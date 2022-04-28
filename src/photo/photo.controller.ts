@@ -7,9 +7,11 @@ import {
   ParseIntPipe,
   Post,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { InstanceLoader } from '@nestjs/core/injector/instance-loader';
+import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBadRequestResponse,
@@ -33,6 +35,7 @@ export class PhotoController {
     private s3Service: S3Service,
   ) {}
   @ApiOperation({ summary: 'get photo by id' })
+  @UseGuards(AuthGuard('jwt'))
   @ApiBadRequestResponse({ description: 'Photo not found' })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @Get('/:photoId')

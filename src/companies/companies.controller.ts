@@ -34,6 +34,7 @@ export class CompaniesController {
     private projectService: ProjectService,
   ) {}
   @Post('')
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Create new company' })
   @ApiResponse({
     status: 201,
