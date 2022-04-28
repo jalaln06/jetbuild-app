@@ -39,12 +39,12 @@ export class ProjectController {
   })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiBadRequestResponse({ description: 'wrong parameters' })
-  CreateNewProject(
+  async CreateNewProject(
     @Body() project: CreateProjectDto,
     @Param('companyId', ParseIntPipe) companyId: number,
   ) {
     try {
-      this.projectService.createProject(project, companyId);
+      return await this.projectService.createProject(project, companyId);
     } catch (error) {}
   }
   @Post('/:projectId/user/:userId')
@@ -73,7 +73,7 @@ export class ProjectController {
   @ApiOperation({ summary: 'Take All Points from one project' })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiOkResponse({})
-  @ApiBadRequestResponse({ description: 'Points not found' })
+  @ApiBadRequestResponse({ description: 'Project not found' })
   GetAllPhotosFromPoint(@Param('projectId', ParseIntPipe) projectId: number) {
     return this.pointService.getPointsFromProject(projectId);
   }

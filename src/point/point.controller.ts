@@ -94,6 +94,6 @@ export class PointController {
   })
   async uploadFile(@UploadedFile() file: Buffer, @Body() data: CreatePhotoDto) {
     console.log(file);
-    this.photoService.uploadPhoto(file, data);
+    return await this.photoService.uploadPhoto(file, data);
   }
 }
