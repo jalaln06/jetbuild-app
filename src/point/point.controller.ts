@@ -43,6 +43,7 @@ export class PointController {
     readonly prisma: PrismaService,
   ) {}
   @Get('/:pointId/photos')
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Take All Photos from one point' })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiOkResponse({ description: 'Returns array of points' })
@@ -64,6 +65,7 @@ export class PointController {
     return await this.pointService.createPoint(point);
   }
   @Post('upload')
+  @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -92,6 +94,6 @@ export class PointController {
   })
   async uploadFile(@UploadedFile() file: Buffer, @Body() data: CreatePhotoDto) {
     console.log(file);
-    //this.photoService.uploadPhoto(file, data);
+    this.photoService.uploadPhoto(file, data);
   }
 }
