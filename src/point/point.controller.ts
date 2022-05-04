@@ -109,7 +109,6 @@ export class PointController {
   @Post('upload')
   @UseGuards(AuthGuard('jwt'))
   async uploadFile(@Body() data: CreatePhotoDto) {
-    console.log(data);
     return await this.photoService.uploadPhoto(data.buffer, data);
   }
 }
