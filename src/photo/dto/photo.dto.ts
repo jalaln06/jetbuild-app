@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNumber, IsString } from 'class-validator';
+import { isArrayBuffer } from 'util/types';
 
 export class CreatePhotoDto {
   @IsString()
@@ -18,5 +19,6 @@ export class CreatePhotoDto {
   @ApiProperty({ description: 'pointId', example: '1' })
   pointId: number;
   @ApiProperty({ description: 'file buffer' })
+  @IsString()
   buffer: Buffer;
 }
