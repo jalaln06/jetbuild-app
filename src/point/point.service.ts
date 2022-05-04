@@ -4,7 +4,7 @@ import { CreatePointDto } from './dto/point.dto';
 
 @Injectable()
 export class PointService {
-  async getPointsFromProject(projectId: number) {
+  async getPointsFromProject(projectId: number, limit: number, page: number) {
     const proj = await this.prisma.project.findUnique({
       where: {
         id: projectId,
@@ -14,6 +14,8 @@ export class PointService {
       throw new BadRequestException('Project not found');
     }
     return await this.prisma.point.findMany({
+      skip: page,
+      take: limit,
       where: {
         projectId: projectId,
       },

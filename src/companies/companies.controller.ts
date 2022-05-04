@@ -7,6 +7,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -17,11 +18,13 @@ import {
   ApiHideProperty,
   ApiOkResponse,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { Role, User, Company, prisma } from '@prisma/client';
 import AuthUser from 'src/auth/auth-user.decorator';
+import { PaginationDTO } from 'src/dto/pagination.dto';
 import { ProjectService } from 'src/project/project.service';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/company.dto';
@@ -81,22 +84,21 @@ export class CompaniesController {
       this.companiesService.asignUserToCompany(userId, companyId, 'WORKER');
     } catch (error) {}
   }
-  @Get('/:companyId/photos')
-  @ApiOperation({ summary: 'Take All Photos from one company' })
-  @ApiForbiddenResponse({ description: 'Forbidden' })
-  @ApiOkResponse({})
-  @ApiBadRequestResponse({ description: 'Photos not found' })
-  GetAllPhotosFromCompany(@Param('companyId', ParseIntPipe) companyId: number) {
-    throw new NotImplementedException();
-  }
   @Get('/:companyId/projects')
   @ApiOperation({ summary: 'Get all projects from company' })
+  @ApiQuery({ type: PaginationDTO })
   @ApiBadRequestResponse({ description: 'No such company' })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   async GetAllProjectsFromCompany(
     @Param('companyId', ParseIntPipe) companyId: number,
+    @Query('limit', ParseIntPipe) limit,
+    @Query('page', ParseIntPipe) page,
   ) {
-    return await this.projectService.getAllProjectsFromCompany(companyId);
+    return await this.projectService.getAllProjectsFromCompany(
+      companyId,
+      limit,
+      page,
+    );
   }
   @ApiHideProperty()
   @Delete('/:companyId')

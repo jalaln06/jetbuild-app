@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -15,10 +16,12 @@ import {
   ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { unwatchFile } from 'fs';
+import { PaginationDTO } from 'src/dto/pagination.dto';
 import { PointService } from 'src/point/point.service';
 import { CreateProjectDto } from './dto/project.dto';
 import { ProjectService } from './project.service';
@@ -59,22 +62,18 @@ export class ProjectController {
   ) {
     throw new NotImplementedException();
   }
-  @Get('/:projectId/photos')
-  @UseGuards(AuthGuard('jwt'))
-  @ApiOperation({ summary: 'Take All Photos from one project' })
-  @ApiForbiddenResponse({ description: 'Forbidden' })
-  @ApiOkResponse({})
-  @ApiBadRequestResponse({ description: 'Photos not found' })
-  GetAllPhotosFromProject(@Param('projectId', ParseIntPipe) projectId: number) {
-    throw new NotImplementedException();
-  }
   @Get('/:projectId/points')
   @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Take All Points from one project' })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiOkResponse({})
+  @ApiQuery({ type: PaginationDTO })
   @ApiBadRequestResponse({ description: 'Project not found' })
-  GetAllPhotosFromPoint(@Param('projectId', ParseIntPipe) projectId: number) {
-    return this.pointService.getPointsFromProject(projectId);
+  GetAllPhotosFromPoint(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Query('limit', ParseIntPipe) limit,
+    @Query('page', ParseIntPipe) page,
+  ) {
+    return this.pointService.getPointsFromProject(projectId, limit, page);
   }
 }

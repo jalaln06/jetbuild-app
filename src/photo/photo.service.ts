@@ -6,8 +6,10 @@ import { S3Service } from './s3.service';
 
 @Injectable()
 export class PhotoService {
-  async getPhotosFromPoint(pointId: number) {
+  async getPhotosFromPoint(pointId: number, limit: number, page: number) {
     return await this.prisma.photo.findMany({
+      skip: page,
+      take: limit,
       where: {
         pointId: pointId,
       },

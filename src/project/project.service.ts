@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, Project } from '@prisma/client';
 import { PrismaService } from 'prisma/module/prisma.service';
+import { take } from 'rxjs';
 import { CreateProjectDto } from './dto/project.dto';
 
 @Injectable()
@@ -17,8 +18,14 @@ export class ProjectService {
     });
     return createProject;
   }
-  async getAllProjectsFromCompany(companyId: number) {
+  async getAllProjectsFromCompany(
+    companyId: number,
+    limit: number,
+    page: number,
+  ) {
     return await this.prisma.project.findMany({
+      skip: page,
+      take: limit,
       where: {
         companyId: companyId,
       },

@@ -9,6 +9,7 @@ import {
   Session,
   Request,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
@@ -18,13 +19,16 @@ import {
   ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { PrismaService } from 'prisma/module/prisma.service';
+import { cursorTo } from 'readline';
 import AuthUser from 'src/auth/auth-user.decorator';
 import { CompaniesService } from 'src/companies/companies.service';
+import { PaginationDTO } from 'src/dto/pagination.dto';
 import { CreateUserDto, UserLoginDto } from './dto/user.dto';
 import { UserService } from './user.service';
 @ApiBearerAuth()
@@ -39,8 +43,13 @@ export class UserController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('/companieslist')
-  async getCompaniesList(@AuthUser() user: User) {
-    return await this.companiesService.getCompanieslist(user.id);
+  @ApiQuery({ type: PaginationDTO })
+  async getCompaniesList(
+    @AuthUser() user: User,
+    @Query('limit', ParseIntPipe) limit,
+    @Query('page', ParseIntPipe) page,
+  ) {
+    return await this.companiesService.getCompanieslist(user.id, limit, page);
   }
 
   @Get('/:userId/photos')

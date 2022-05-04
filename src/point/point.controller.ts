@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -21,12 +22,14 @@ import {
   ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { PrismaService } from 'prisma/module/prisma.service';
 import { CreateCompanyDto } from 'src/companies/dto/company.dto';
+import { PaginationDTO } from 'src/dto/pagination.dto';
 import { CreatePhotoDto } from 'src/photo/dto/photo.dto';
 import { PhotoService } from 'src/photo/photo.service';
 import { S3Service } from 'src/photo/s3.service';
@@ -45,11 +48,16 @@ export class PointController {
   @Get('/:pointId/photos')
   @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Take All Photos from one point' })
+  @ApiQuery({ type: PaginationDTO })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiOkResponse({ description: 'Returns array of points' })
   @ApiBadRequestResponse({ description: 'Photos not found' })
-  async GetAllPhotosFromPoint(@Param('pointId', ParseIntPipe) pointId: number) {
-    return await this.photoService.getPhotosFromPoint(pointId);
+  async GetAllPhotosFromPoint(
+    @Param('pointId', ParseIntPipe) pointId: number,
+    @Query('limit', ParseIntPipe) limit,
+    @Query('page', ParseIntPipe) page,
+  ) {
+    return await this.photoService.getPhotosFromPoint(pointId, 1, 2);
   }
   @Post('/create')
   @UseGuards(AuthGuard('jwt'))

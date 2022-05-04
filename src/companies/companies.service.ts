@@ -26,12 +26,18 @@ export class CompaniesService {
     }
     return rel.role === 'OWNER';
   }
-  async getCompanieslist(id: number) {
-    const res = [];
-    const ids = await this.getCompaniesIdsByUserId(id);
-    for (let index = 0; index < ids.length; index++) {
-      res.push(await this.getCompanyById(ids[index].companyId));
-    }
+  async getCompanieslist(id: number, limit: number, page: number) {
+    const res = await this.prisma.company.findMany({
+      skip: page,
+      take: limit,
+      where: {
+        users: {
+          some: {
+            userId: id,
+          },
+        },
+      },
+    });
     return res;
   }
   constructor(private prisma: PrismaService) {}
