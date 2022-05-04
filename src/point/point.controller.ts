@@ -108,32 +108,6 @@ export class PointController {
   }
   @Post('upload')
   @UseGuards(AuthGuard('jwt'))
-  @UseInterceptors(FileInterceptor('file'))
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        file: {
-          // 👈 this property
-          type: 'string',
-          format: 'binary',
-        },
-        name: {
-          type: 'string',
-        },
-        description: {
-          type: 'string',
-        },
-        userId: {
-          type: 'number',
-        },
-        pointId: {
-          type: 'number',
-        },
-      },
-    },
-  })
   async uploadFile(@Body() data: CreatePhotoDto) {
     return await this.photoService.uploadPhoto(data.buffer, data);
   }
