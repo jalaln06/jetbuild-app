@@ -72,6 +72,40 @@ export class PointController {
     console.log(point);
     return await this.pointService.createPoint(point);
   }
+  @Post('uploadfake')
+  @UseGuards(AuthGuard('jwt'))
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          // 👈 this property
+          type: 'string',
+          format: 'binary',
+        },
+        name: {
+          type: 'string',
+        },
+        description: {
+          type: 'string',
+        },
+        userId: {
+          type: 'number',
+        },
+        pointId: {
+          type: 'number',
+        },
+      },
+    },
+  })
+  async uploadFileFake(
+    @UploadedFile() file: Buffer,
+    @Body() data: CreatePhotoDto,
+  ) {
+    return await this.photoService.uploadPhoto(file, data);
+  }
   @Post('upload')
   @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(FileInterceptor('file'))
@@ -100,7 +134,7 @@ export class PointController {
       },
     },
   })
-  async uploadFile(@UploadedFile() file: Buffer, @Body() data: CreatePhotoDto) {
-    return await this.photoService.uploadPhoto(file, data);
+  async uploadFile(@Body() data: CreatePhotoDto) {
+    return await this.photoService.uploadPhoto(data.buffer, data);
   }
 }

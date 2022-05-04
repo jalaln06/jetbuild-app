@@ -17,4 +17,6 @@ export class CreatePhotoDto {
   @IsNumber()
   @ApiProperty({ description: 'pointId', example: '1' })
   pointId: number;
+  @ApiProperty({ description: 'file buffer' })
+  buffer: Buffer;
 }
