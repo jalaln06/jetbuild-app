@@ -3,6 +3,7 @@ import { url } from 'inspector';
 import { PrismaService } from 'prisma/module/prisma.service';
 import { CreatePhotoDto } from './dto/photo.dto';
 import { S3Service } from './s3.service';
+import { YandexStorageService } from './yandexs3.service';
 
 @Injectable()
 export class PhotoService {
@@ -12,6 +13,9 @@ export class PhotoService {
       take: limit,
       where: {
         pointId: pointId,
+      },
+      orderBy: {
+        timeCreated: 'desc',
       },
     });
   }
@@ -30,17 +34,24 @@ export class PhotoService {
         s3Url: 'if you see this here that means some serious error happened. ',
       },
     });
-    const urlRes = await this.s3Service.uploadPhotoToS3(file, key.id);
+
+    const urlRes = await this.yandexService.save(file);
+    console.log('URLRES');
+    console.log(urlRes);
     const obj = await this.prisma.photo.update({
       where: {
         id: key.id,
       },
       data: {
-        s3Url: urlRes.Location,
+        s3Url: urlRes,
       },
     });
     console.log(obj);
     return 'photo succesfully uplaoded';
   }
-  constructor(private prisma: PrismaService, private s3Service: S3Service) {}
+  constructor(
+    private prisma: PrismaService,
+    private s3Service: S3Service,
+    private yandexService: YandexStorageService,
+  ) {}
 }
