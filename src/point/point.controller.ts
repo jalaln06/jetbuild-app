@@ -18,14 +18,12 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiConsumes,
-  ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
   ApiQuery,
   ApiResponse,
   ApiTags,
-  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { PrismaService } from 'prisma/module/prisma.service';
 import { CreateCompanyDto } from 'src/companies/dto/company.dto';
@@ -109,6 +107,6 @@ export class PointController {
   @Post('upload')
   @UseGuards(AuthGuard('jwt'))
   async uploadFile(@Body() data: CreatePhotoDto) {
-    return await this.photoService.uploadPhoto(data.buffer, data);
+    return await this.photoService.uploadPhotoWithLink(data);
   }
 }

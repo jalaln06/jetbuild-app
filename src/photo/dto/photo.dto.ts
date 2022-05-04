@@ -18,7 +18,7 @@ export class CreatePhotoDto {
   @IsNumber()
   @ApiProperty({ description: 'pointId', example: '1' })
   pointId: number;
-  @ApiProperty({ description: 'file buffer' })
+  @ApiProperty({ description: 'S3 Url' })
   @IsString()
-  buffer: Buffer;
+  S3Url: string;
 }

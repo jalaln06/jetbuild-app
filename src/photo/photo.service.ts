@@ -7,6 +7,17 @@ import { YandexStorageService } from './yandexs3.service';
 
 @Injectable()
 export class PhotoService {
+  async uploadPhotoWithLink(photo: CreatePhotoDto) {
+    return await this.prisma.photo.create({
+      data: {
+        name: photo.name,
+        description: photo.description,
+        author: { connect: { id: photo.userId } },
+        point: { connect: { id: photo.pointId } },
+        s3Url: photo.S3Url,
+      },
+    });
+  }
   async getPhotosFromPoint(pointId: number, limit: number, page: number) {
     return await this.prisma.photo.findMany({
       skip: page,
