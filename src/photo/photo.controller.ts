@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   NotImplementedException,
   Param,
@@ -23,6 +24,8 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { User } from '@prisma/client';
+import AuthUser from 'src/auth/auth-user.decorator';
 import { CreatePhotoDto } from './dto/photo.dto';
 import { PhotoService } from './photo.service';
 import { S3Service } from './s3.service';
@@ -41,5 +44,16 @@ export class PhotoController {
   @Get('/:photoId')
   async getPhoto(@Param('photoId', ParseIntPipe) photoId: number) {
     return await this.photoService.getPhoto(photoId);
+  }
+  @ApiOperation({ summary: 'delete photo by id' })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBadRequestResponse({ description: 'Photo not found' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @Delete('/:photoId')
+  async deletePhoto(
+    @Param('photoId', ParseIntPipe) photoId: number,
+    @AuthUser() user: User,
+  ) {
+    return await this.photoService.deletePhoto(photoId, user);
   }
 }
