@@ -24,7 +24,11 @@ export class ProjectService {
     page: number,
   ) {
     return await this.prisma.$transaction([
-      this.prisma.project.count(),
+      this.prisma.project.count({
+        where: {
+          companyId: companyId,
+        },
+      }),
       this.prisma.project.findMany({
         skip: page,
         take: limit,

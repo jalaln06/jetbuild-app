@@ -51,13 +51,4 @@ export class UserController {
   ) {
     return await this.companiesService.getCompanieslist(user.id, limit, page);
   }
-
-  @Get('/:userId/photos')
-  @ApiOperation({ summary: 'Take All Photos from one user' })
-  @ApiForbiddenResponse({ description: 'Forbidden' })
-  @ApiOkResponse({})
-  @ApiBadRequestResponse({ description: 'Photos not found' })
-  async GetAllPhotosFromUser(@Param('userId') userId: number) {
-    throw new NotImplementedException();
-  }
 }

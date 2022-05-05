@@ -14,7 +14,11 @@ export class PointService {
       throw new BadRequestException('Project not found');
     }
     return await this.prisma.$transaction([
-      this.prisma.point.count(),
+      this.prisma.point.count({
+        where: {
+          projectId: projectId,
+        },
+      }),
       this.prisma.point.findMany({
         skip: page,
         take: limit,

@@ -28,7 +28,15 @@ export class CompaniesService {
   }
   async getCompanieslist(id: number, limit: number, page: number) {
     return await this.prisma.$transaction([
-      this.prisma.company.count(),
+      this.prisma.company.count({
+        where: {
+          users: {
+            some: {
+              userId: id,
+            },
+          },
+        },
+      }),
       this.prisma.company.findMany({
         skip: page,
         take: limit,
