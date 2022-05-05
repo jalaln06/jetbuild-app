@@ -25,6 +25,7 @@ import {
 import { Role, User, Company, prisma } from '@prisma/client';
 import AuthUser from 'src/auth/auth-user.decorator';
 import { PaginationDTO } from 'src/dto/pagination.dto';
+import { CreateProjectDto } from 'src/project/dto/project.dto';
 import { ProjectService } from 'src/project/project.service';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/company.dto';
@@ -82,6 +83,23 @@ export class CompaniesController {
   ) {
     try {
       this.companiesService.asignUserToCompany(userId, companyId, 'WORKER');
+    } catch (error) {}
+  }
+  @Post('/:companyId/project')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiOperation({ summary: 'Create new project' })
+  @ApiResponse({
+    status: 201,
+    description: 'Created',
+  })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiBadRequestResponse({ description: 'wrong parameters' })
+  async CreateNewProject(
+    @Body() project: CreateProjectDto,
+    @Param('companyId', ParseIntPipe) companyId: number,
+  ) {
+    try {
+      return await this.projectService.createProject(project, companyId);
     } catch (error) {}
   }
   @Get('/:companyId/projects')

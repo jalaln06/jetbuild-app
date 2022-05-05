@@ -6,7 +6,9 @@ import {
   NotImplementedException,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
+  Put,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -26,7 +28,7 @@ import {
 } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import AuthUser from 'src/auth/auth-user.decorator';
-import { CreatePhotoDto } from './dto/photo.dto';
+import { ChangePhotoDto, CreatePhotoDto } from './dto/photo.dto';
 import { PhotoService } from './photo.service';
 import { S3Service } from './s3.service';
 @ApiBearerAuth()
@@ -55,5 +57,15 @@ export class PhotoController {
     @AuthUser() user: User,
   ) {
     return await this.photoService.deletePhoto(photoId, user);
+  }
+  @UseGuards(AuthGuard('jwt'))
+  @Put('/:photoId')
+  async changePhoto(
+    @Param('photoId', ParseIntPipe) photoId: number,
+    @AuthUser() user: User,
+    @Body() data: ChangePhotoDto,
+  ) {
+    console.log(data);
+    return await this.photoService.changePhoto(photoId, user, data);
   }
 }

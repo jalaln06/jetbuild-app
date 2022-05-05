@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { isArrayBuffer } from 'util/types';
 
 export class CreatePhotoDto {
@@ -21,4 +21,14 @@ export class CreatePhotoDto {
   @ApiProperty({ description: 'S3 Url' })
   @IsString()
   S3Url: string;
+}
+export class ChangePhotoDto {
+  @IsOptional()
+  @IsString()
+  @ApiProperty({ description: 'Photo description', example: 'Photo of toilet' })
+  description?: string;
+  @IsOptional()
+  @IsString()
+  @ApiProperty({ description: 'Name of Photo', example: 'Doe' })
+  name?: string;
 }

@@ -2,12 +2,30 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { url } from 'inspector';
 import { PrismaService } from 'prisma/module/prisma.service';
-import { CreatePhotoDto } from './dto/photo.dto';
+import { ChangePhotoDto, CreatePhotoDto } from './dto/photo.dto';
 import { S3Service } from './s3.service';
 import { YandexStorageService } from './yandexs3.service';
 
 @Injectable()
 export class PhotoService {
+  async changePhoto(photoId: number, user: User, changes: ChangePhotoDto) {
+    console.log(changes);
+    const photo = await this.prisma.photo.findUnique({
+      where: {
+        id: photoId,
+      },
+    });
+    if (photo.authorId === user.id) {
+      return await this.prisma.photo.update({
+        where: {
+          id: photoId,
+        },
+        data: changes,
+      });
+    } else {
+      throw new UnauthorizedException('You are not the creator of this photo!');
+    }
+  }
   async deletePhoto(photoId: number, user: User) {
     const photo = await this.prisma.photo.findUnique({
       where: {
