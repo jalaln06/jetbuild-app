@@ -55,7 +55,7 @@ export class PointController {
     @Query('limit', ParseIntPipe) limit,
     @Query('page', ParseIntPipe) page,
   ) {
-    return await this.photoService.getPhotosFromPoint(pointId, 1, 2);
+    return await this.photoService.getPhotosFromPoint(pointId, limit, page);
   }
   @Post('/create')
   @UseGuards(AuthGuard('jwt'))

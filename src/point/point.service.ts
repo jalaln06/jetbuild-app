@@ -13,13 +13,16 @@ export class PointService {
     if (!proj) {
       throw new BadRequestException('Project not found');
     }
-    return await this.prisma.point.findMany({
-      skip: page,
-      take: limit,
-      where: {
-        projectId: projectId,
-      },
-    });
+    return await this.prisma.$transaction([
+      this.prisma.point.count(),
+      this.prisma.point.findMany({
+        skip: page,
+        take: limit,
+        where: {
+          projectId: projectId,
+        },
+      }),
+    ]);
   }
   constructor(private prisma: PrismaService) {}
   async createPoint(data: CreatePointDto) {

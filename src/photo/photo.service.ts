@@ -19,16 +19,19 @@ export class PhotoService {
     });
   }
   async getPhotosFromPoint(pointId: number, limit: number, page: number) {
-    return await this.prisma.photo.findMany({
-      skip: page,
-      take: limit,
-      where: {
-        pointId: pointId,
-      },
-      orderBy: {
-        timeCreated: 'desc',
-      },
-    });
+    return await this.prisma.$transaction([
+      this.prisma.photo.count(),
+      this.prisma.photo.findMany({
+        where: {
+          pointId: pointId,
+        },
+        orderBy: {
+          timeCreated: 'desc',
+        },
+        skip: page,
+        take: limit,
+      }),
+    ]);
   }
   async getPhoto(photoId: number) {
     return await this.prisma.photo.findUnique({
