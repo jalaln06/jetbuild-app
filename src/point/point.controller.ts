@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   NotImplementedException,
   Param,
@@ -69,6 +70,12 @@ export class PointController {
   async CreateNewPoint(@Body() point: CreatePointDto) {
     console.log(point);
     return await this.pointService.createPoint(point);
+  }
+  @Delete('/:pointId')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiOperation({ summary: ' Delete point' })
+  async deletePoint(@Param('pointId', ParseIntPipe) pointId: number) {
+    return await this.pointService.deletePoint(pointId);
   }
   @Post('uploadfake')
   @UseGuards(AuthGuard('jwt'))

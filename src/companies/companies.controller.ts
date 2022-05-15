@@ -24,6 +24,8 @@ import {
 } from '@nestjs/swagger';
 import { Role, User, Company, prisma } from '@prisma/client';
 import AuthUser from 'src/auth/auth-user.decorator';
+import { Roles } from 'src/auth/roles.decorator';
+import { RolesGuard } from 'src/auth/roles.guard';
 import { PaginationDTO } from 'src/dto/pagination.dto';
 import { CreateProjectDto } from 'src/project/dto/project.dto';
 import { ProjectService } from 'src/project/project.service';
@@ -52,8 +54,6 @@ export class CompaniesController {
     @AuthUser() user: User,
   ) {
     try {
-      console.log(company);
-      console.log(user);
       const comp = await this.companiesService.createCompany(company);
       await this.companiesService.asignUserToCompany(user.id, comp.id, 'OWNER');
     } catch (error) {}
@@ -75,6 +75,8 @@ export class CompaniesController {
   @ApiForbiddenResponse({ description: 'You have no rights to write here' })
   @ApiBadRequestResponse({ description: 'Company not found' })
   @ApiBadRequestResponse({ description: 'User not found' })
+  @Roles(Role.OWNER, Role.MANAGER)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Post('/:companyId/user/:userId')
   addUserToCompany(
     @Param('userId', ParseIntPipe) userId: number,
@@ -94,6 +96,8 @@ export class CompaniesController {
   })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiBadRequestResponse({ description: 'wrong parameters' })
+  @Roles(Role.OWNER, Role.MANAGER)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   async CreateNewProject(
     @Body() project: CreateProjectDto,
     @Param('companyId', ParseIntPipe) companyId: number,
@@ -120,6 +124,8 @@ export class CompaniesController {
   }
   @ApiHideProperty()
   @Delete('/:companyId')
+  @Roles(Role.OWNER)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   async deleteCompany(
     @Param('companyId', ParseIntPipe) companyId: number,
     @AuthUser() user: User,

@@ -93,9 +93,20 @@ export class CompaniesService {
     if (company == null) {
       throw new HttpException('Company not Found', HttpStatus.NOT_FOUND);
     }
-    await this.prisma.usersOnCompanies.create({
-      data: { userId: userId, companyId: companyId, role: Role },
-    });
+    try {
+      await this.prisma.usersOnCompanies.create({
+        data: {
+          userId: userId,
+          companyId: companyId,
+          role: Role,
+        },
+      });
+    } catch (e) {
+      throw new HttpException(
+        'User already assigned to company',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
   async getCompaniesIdsByUserId(userId: number) {
     const result = await this.prisma.usersOnCompanies.findMany({

@@ -4,6 +4,13 @@ import { CreatePointDto } from './dto/point.dto';
 
 @Injectable()
 export class PointService {
+  async deletePoint(pointId: number) {
+    return await this.prisma.point.delete({
+      where: {
+        id: pointId,
+      },
+    });
+  }
   async getPointsFromProject(projectId: number, limit: number, page: number) {
     const proj = await this.prisma.project.findUnique({
       where: {
