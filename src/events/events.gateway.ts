@@ -12,7 +12,7 @@ import { Server, Socket } from 'socket.io';
 import { CompaniesService } from 'src/companies/companies.service';
 import { UserService } from 'src/users/user.service';
 
-@WebSocketGateway()
+@WebSocketGateway({ cors: true })
 export class EventsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
