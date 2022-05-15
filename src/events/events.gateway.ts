@@ -16,8 +16,8 @@ import { UserService } from 'src/users/user.service';
 export class EventsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
+  constructor(private companiesService: CompaniesService) {}
   private userService: UserService;
-  private companiesService: CompaniesService;
   @WebSocketServer() wss: Server;
   handleDisconnect(client: Socket) {
     this.logger.log(`Client disconnected: ${client.id}`);
