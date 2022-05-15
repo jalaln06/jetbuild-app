@@ -31,6 +31,7 @@ export class EventsGateway
   }
   @SubscribeMessage('eventsToServer')
   handleMessage(client: Socket, message: { room: string; text: string }): void {
+    console.log(message);
     this.wss.to(message.room).emit('eventsToClient', message.text);
   }
   @SubscribeMessage('joinRoom')
@@ -40,9 +41,9 @@ export class EventsGateway
       10,
       1,
     );
-    console.log(companies[1]);
     companies[1].forEach((element) => {
       client.join(element.id.toString());
     });
+    console.log(client.rooms);
   }
 }
