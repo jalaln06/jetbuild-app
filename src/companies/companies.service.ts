@@ -118,4 +118,32 @@ export class CompaniesService {
     }
     return await result;
   }
+  async getUsersByCompanyId(companyId: number) {
+    const res = await this.prisma.company.findUnique({
+      where: { id: companyId },
+      include: {
+        users: {
+          include: { user: true },
+          orderBy: {
+            user: {
+              timeCreated: 'desc',
+            },
+          },
+        },
+      },
+    });
+    res.users.forEach(async (user) => {
+      this.exclude(user.user, 'password');
+    });
+    return res;
+  }
+  exclude<User, Key extends keyof User>(
+    user: User,
+    ...keys: Key[]
+  ): Omit<User, Key> {
+    for (const key of keys) {
+      delete user[key];
+    }
+    return user;
+  }
 }

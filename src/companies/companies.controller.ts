@@ -29,6 +29,7 @@ import { RolesGuard } from 'src/auth/roles.guard';
 import { PaginationDTO } from 'src/dto/pagination.dto';
 import { CreateProjectDto } from 'src/project/dto/project.dto';
 import { ProjectService } from 'src/project/project.service';
+import { runInThisContext } from 'vm';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/company.dto';
 @ApiBearerAuth()
@@ -131,5 +132,11 @@ export class CompaniesController {
     @AuthUser() user: User,
   ) {
     this.companiesService.deleteCompanyById(companyId, user);
+  }
+  @Get('/:companyId/users')
+  async getAllUsersFromCompanu(
+    @Param('companyId', ParseIntPipe) companyId: number,
+  ) {
+    return await this.companiesService.getUsersByCompanyId(companyId);
   }
 }
