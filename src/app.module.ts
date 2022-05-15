@@ -8,6 +8,7 @@ import { PrismaModule } from 'prisma/module/prisma.module';
 
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { EventsGateway } from './events/events.gateway';
 @Module({
   imports: [
     UsersModule,
@@ -22,6 +23,6 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [EventsGateway],
 })
 export class AppModule {}
