@@ -39,8 +39,9 @@ export class EventsGateway
       userId,
       10,
       1,
-    )[1];
-    companies.forEach((element) => {
+    );
+    console.log(companies[1]);
+    companies[1].forEach((element) => {
       client.join(element.id.toString());
     });
   }
