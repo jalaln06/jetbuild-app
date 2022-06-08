@@ -39,10 +39,11 @@ export class EventsGateway
     const companies = await this.companiesService.getCompanieslist(
       userId,
       10,
-      0,
+      1,
     );
     companies[1].forEach((element) => {
       client.join(element.id.toString());
     });
+    console.log(client.rooms);
   }
 }
