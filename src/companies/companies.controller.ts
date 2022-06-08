@@ -7,6 +7,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -31,7 +32,7 @@ import { CreateProjectDto } from 'src/project/dto/project.dto';
 import { ProjectService } from 'src/project/project.service';
 import { runInThisContext } from 'vm';
 import { CompaniesService } from './companies.service';
-import { CreateCompanyDto } from './dto/company.dto';
+import { CreateCompanyDto, UpdateCompanyDto } from './dto/company.dto';
 @ApiBearerAuth()
 @ApiTags('companies')
 @Controller('companies')
@@ -59,17 +60,33 @@ export class CompaniesController {
       await this.companiesService.asignUserToCompany(user.id, comp.id, 'OWNER');
     } catch (error) {}
   }
+  @Put('/:companyId')
+  @ApiOkResponse({
+    description: 'Company Updated succesfully',
+  })
+  @ApiOperation({
+    summary: 'Update company by UpdateCompanyDTO',
+  })
+  @UseGuards(AuthGuard('jwt'))
+  @Roles(Role.OWNER, Role.MANAGER)
+  async UpdateCompany(
+    @Body() company: UpdateCompanyDto,
+    @Param('companyId', ParseIntPipe) companyId: number,
+  ) {
+    return await this.companiesService.updateCompanyById(companyId, company);
+  }
+
   @Get('/:companyId')
   @ApiOkResponse({
     description: 'returns company by Id',
   })
   @ApiOperation({ summary: 'Get company by Id' })
   @ApiBadRequestResponse({ description: 'Company not found' })
-  GetCompany(
+  async GetCompany(
     @Param('companyId', ParseIntPipe) companyId: number,
   ): Promise<Company> {
     try {
-      return this.companiesService.getCompanyById(companyId);
+      return await this.companiesService.getCompanyById(companyId);
     } catch (error) {}
   }
   @ApiOperation({ summary: 'assign user to company' })

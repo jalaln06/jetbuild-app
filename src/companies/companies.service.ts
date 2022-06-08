@@ -7,9 +7,16 @@ import {
 import { Company, Prisma, Role, User } from '@prisma/client';
 import { PrismaService } from 'prisma/module/prisma.service';
 import { NotFoundError } from 'rxjs';
+import { UpdateCompanyDto } from './dto/company.dto';
 
 @Injectable()
 export class CompaniesService {
+  async updateCompanyById(companyId: number, data: Prisma.CompanyUpdateInput) {
+    return await this.prisma.company.update({
+      where: { id: companyId },
+      data,
+    });
+  }
   async deleteCompanyById(companyId: number, user: User) {
     throw new Error('Method not implemented.');
     this.checkOwnership(companyId, user);

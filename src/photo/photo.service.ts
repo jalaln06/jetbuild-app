@@ -55,7 +55,11 @@ export class PhotoService {
   }
   async getPhotosFromPoint(pointId: number, limit: number, page: number) {
     return await this.prisma.$transaction([
-      this.prisma.photo.count(),
+      this.prisma.photo.count({
+        where: {
+          pointId: pointId,
+        },
+      }),
       this.prisma.photo.findMany({
         where: {
           pointId: pointId,
