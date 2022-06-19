@@ -30,7 +30,6 @@ import { RolesGuard } from 'src/auth/roles.guard';
 import { PaginationDTO } from 'src/dto/pagination.dto';
 import { CreateProjectDto } from 'src/project/dto/project.dto';
 import { ProjectService } from 'src/project/project.service';
-import { runInThisContext } from 'vm';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto, UpdateCompanyDto } from './dto/company.dto';
 @ApiBearerAuth()
@@ -95,14 +94,14 @@ export class CompaniesController {
   @ApiBadRequestResponse({ description: 'User not found' })
   @Roles(Role.OWNER, Role.MANAGER)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Post('/:companyId/user/:userId')
+  @Post('/:companyId/user/:userEmail')
   addUserToCompany(
-    @Param('userId', ParseIntPipe) userId: number,
+    @Param('userEmail') userEmail: string,
     @Param('companyId', ParseIntPipe) companyId: number,
     @Body('role') role: Role,
   ) {
     try {
-      this.companiesService.asignUserToCompany(userId, companyId, 'WORKER');
+      this.companiesService.asignUserToCompany(userEmail, companyId, 'WORKER');
     } catch (error) {}
   }
   @Post('/:companyId/project')

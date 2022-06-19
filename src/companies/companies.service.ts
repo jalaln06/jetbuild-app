@@ -88,9 +88,10 @@ export class CompaniesService {
       },
     });
   }
-  async asignUserToCompany(userId: number, companyId: number, Role: Role) {
-    console.log(userId, companyId, Role);
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+  async asignUserToCompany(userEmail: string, companyId: number, Role: Role) {
+    const user = await this.prisma.user.findUnique({
+      where: { email: userEmail },
+    });
     if (user == null) {
       throw new HttpException('User not Found', HttpStatus.NOT_FOUND);
     }
@@ -103,7 +104,7 @@ export class CompaniesService {
     try {
       await this.prisma.usersOnCompanies.create({
         data: {
-          userId: userId,
+          userId: user.id,
           companyId: companyId,
           role: Role,
         },
