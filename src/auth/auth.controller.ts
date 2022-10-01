@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards, Param } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login-user.dto';
 import { AuthResponse } from './dto/auth-response.dto';
@@ -14,10 +14,14 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { MailService } from 'src/mail/mail.service';
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly mailService: MailService,
+  ) {}
   @ApiOperation({ summary: 'login user' })
   @ApiResponse({
     status: 200,
@@ -28,6 +32,13 @@ export class AuthController {
   async login(@Body() loginDto: LoginDto): Promise<AuthResponse> {
     console.log(loginDto);
     return await this.authService.login(loginDto);
+  }
+  @ApiOperation({ summary: 'activate user' })
+  @ApiBadRequestResponse({ description: 'User or Password not found' })
+  @Post('/activate/:hash')
+  async activate(@Param('hash') hash: string): Promise<void> {
+    console.log(hash);
+    return await this.authService.activate(hash);
   }
   @ApiOperation({ summary: 'register user' })
   @ApiConflictResponse({ description: 'User already exists' })

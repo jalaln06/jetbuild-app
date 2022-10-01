@@ -12,13 +12,32 @@ import { AuthResponse } from './dto/auth-response.dto';
 import { CreateUserDto } from 'src/users/dto/user.dto';
 import { UserService } from 'src/users/user.service';
 import { prisma } from '@prisma/client';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
+  async activate(hashi: string): Promise<void> {
+    const hashPair = await this.prismaService.hashes.findFirst({
+      where: { hash: hashi },
+    });
+    console.log(hashPair);
+    if (!hashPair) {
+      throw new NotFoundException();
+    }
+    await this.prismaService.user.update({
+      where: {
+        email: hashPair.email,
+      },
+      data: {
+        activated: true,
+      },
+    });
+  }
   constructor(
     private readonly prismaService: PrismaService,
     private jwtService: JwtService,
     private readonly usersService: UserService,
+    private readonly mailService: MailService,
   ) {}
 
   async login(loginDto: LoginDto): Promise<AuthResponse> {
@@ -30,6 +49,9 @@ export class AuthService {
 
     if (!user) {
       throw new NotFoundException('user not found');
+    }
+    if (user.activated == false) {
+      throw new UnauthorizedException('User is not activated');
     }
 
     const validatePassword = await bcrypt.compare(password, user.password);
@@ -60,8 +82,15 @@ export class AuthService {
     if (eresult) {
       throw new ConflictException('email already taken');
     }
-
+    const token = Math.floor(1000 + Math.random() * 9000).toString();
     const user = await this.usersService.createUser(createUserDto);
+    await this.prismaService.hashes.create({
+      data: {
+        email: user.email,
+        hash: token,
+      },
+    });
+    this.mailService.sendUserConfirmationSendGrid(user, token);
     return {
       token: this.jwtService.sign({ login: user.login }),
       user,

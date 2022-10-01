@@ -16,6 +16,8 @@ model User {
   login       String             @unique
   password    String
   timeCreated DateTime           @default(now())
+  activated   Boolean            @default(false)
+  description String
   photos      Photo[]
   projects    Project[]
   companies   UsersOnCompanies[]
@@ -75,6 +77,11 @@ model Photo {
   s3Url       String
   author      User     @relation(fields: [authorId], references: [id])
   authorId    Int
+}
+
+model Hashes {
+  email String
+  hash  String @unique
 }
 
 enum Role {

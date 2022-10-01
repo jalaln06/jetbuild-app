@@ -27,3 +27,11 @@ export class CreateUserDto {
   @ApiProperty({ description: 'user email', example: 'johsdasd@gmail.com' })
   email: string;
 }
+export class UpdateUserDto {
+  @IsString()
+  @ApiProperty({
+    description: 'Description + Title of the user',
+    example: 'John the Carpenter',
+  })
+  about: string;
+}

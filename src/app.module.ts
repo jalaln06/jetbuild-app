@@ -9,6 +9,7 @@ import { PrismaModule } from 'prisma/module/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { EventsGateway } from './events/events.gateway';
+import { MailModule } from './mail/mail.module';
 @Module({
   imports: [
     UsersModule,
@@ -21,6 +22,7 @@ import { EventsGateway } from './events/events.gateway';
       isGlobal: true,
     }),
     AuthModule,
+    MailModule,
   ],
   controllers: [],
   providers: [EventsGateway],
