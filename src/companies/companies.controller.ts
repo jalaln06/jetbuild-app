@@ -159,4 +159,20 @@ export class CompaniesController {
   ) {
     return await this.companiesService.getUsersByCompanyId(companyId);
   }
+  @ApiOperation({ summary: 'invite user to company' })
+  @ApiForbiddenResponse({ description: 'You have no rights to write here' })
+  @ApiBadRequestResponse({ description: 'Company not found' })
+  @ApiBadRequestResponse({ description: 'User not found' })
+  @Roles(Role.OWNER, Role.MANAGER)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Post('/:companyId/user/:userEmail')
+  inviteUserToCompany(
+    @Param('userEmail') userEmail: string,
+    @Param('companyId', ParseIntPipe) companyId: number,
+    @Body('role') role: Role,
+  ) {
+    try {
+      this.companiesService.inviteUserToCompany(userEmail, companyId);
+    } catch (error) {}
+  }
 }

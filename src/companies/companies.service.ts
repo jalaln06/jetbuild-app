@@ -11,6 +11,9 @@ import { UpdateCompanyDto } from './dto/company.dto';
 
 @Injectable()
 export class CompaniesService {
+  inviteUserToCompany(userEmail: string, companyId: number) {
+    throw new Error('Method not implemented.');
+  }
   async updateCompanyById(companyId: number, data: Prisma.CompanyUpdateInput) {
     return await this.prisma.company.update({
       where: { id: companyId },

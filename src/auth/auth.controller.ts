@@ -44,6 +44,7 @@ export class AuthController {
   @ApiConflictResponse({ description: 'User already exists' })
   @Post('/register')
   async register(@Body() createUserDto: CreateUserDto): Promise<AuthResponse> {
+    console.log(createUserDto);
     return await this.authService.register(createUserDto);
   }
 }
