@@ -35,7 +35,7 @@ export class AuthController {
   }
   @ApiOperation({ summary: 'activate user' })
   @ApiBadRequestResponse({ description: 'User or Password not found' })
-  @Post('/activate/:hash')
+  @Get('/activate/:hash')
   async activate(@Param('hash') hash: string): Promise<void> {
     console.log(hash);
     return await this.authService.activate(hash);

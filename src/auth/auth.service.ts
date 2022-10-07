@@ -1,5 +1,7 @@
 import {
   ConflictException,
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -48,16 +50,16 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
     }
     if (user.activated == false) {
-      throw new UnauthorizedException('User is not activated');
+      throw new HttpException('User Not Activated', HttpStatus.FORBIDDEN);
     }
 
     const validatePassword = await bcrypt.compare(password, user.password);
 
     if (!validatePassword) {
-      throw new UnauthorizedException('Invalid password');
+      throw new HttpException('Invalid password', HttpStatus.FORBIDDEN);
     }
 
     return {
