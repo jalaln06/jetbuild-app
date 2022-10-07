@@ -55,6 +55,7 @@ model Project {
   companyId   Int
   points      Point[]
   users       User[]
+  stage       Stage    @default(CREATED)
 }
 
 model Point {
@@ -65,6 +66,7 @@ model Point {
   project     Project  @relation(fields: [projectId], references: [id])
   projectId   Int
   photos      Photo[]
+  stage       Stage    @default(CREATED)
 }
 
 model Photo {
@@ -88,4 +90,11 @@ enum Role {
   OWNER
   MANAGER
   WORKER
+}
+
+enum Stage {
+  CREATED
+  INPROGRESS
+  ONCHECK
+  FINISHED
 }

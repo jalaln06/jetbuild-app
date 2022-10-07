@@ -48,7 +48,7 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new NotFoundException('user not found');
+      throw new NotFoundException('User not found');
     }
     if (user.activated == false) {
       throw new UnauthorizedException('User is not activated');
@@ -57,7 +57,7 @@ export class AuthService {
     const validatePassword = await bcrypt.compare(password, user.password);
 
     if (!validatePassword) {
-      throw new UnauthorizedException('invalid password');
+      throw new UnauthorizedException('Invalid password');
     }
 
     return {
@@ -73,14 +73,14 @@ export class AuthService {
       where: { login: createUserDto.login },
     });
     if (result) {
-      throw new ConflictException('login already taken');
+      throw new ConflictException('Login already taken');
     }
     const eresult = await this.prismaService.user.findUnique({
       where: { email: createUserDto.email },
     });
 
     if (eresult) {
-      throw new ConflictException('email already taken');
+      throw new ConflictException('Email already taken');
     }
     const token = Math.floor(1000 + Math.random() * 9000).toString();
     const user = await this.usersService.createUser(createUserDto);

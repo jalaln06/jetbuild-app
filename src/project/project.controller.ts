@@ -4,7 +4,9 @@ import {
   Get,
   NotImplementedException,
   Param,
+  ParseEnumPipe,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -20,7 +22,9 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { unwatchFile } from 'fs';
+import { Role, Stage } from '@prisma/client';
+import { stat, unwatchFile } from 'fs';
+import { Roles } from 'src/auth/roles.decorator';
 import { PaginationDTO } from 'src/dto/pagination.dto';
 import { PointService } from 'src/point/point.service';
 import { CreateProjectDto } from './dto/project.dto';
@@ -75,5 +79,15 @@ export class ProjectController {
     @Query('page', ParseIntPipe) page,
   ) {
     return this.pointService.getPointsFromProject(projectId, limit, page);
+  }
+  @Patch('/:projectId/stage/:stage')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiOperation({ summary: 'Take All Points from one project' })
+  @Roles(Role.OWNER, Role.MANAGER)
+  ChangeState(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('state', new ParseEnumPipe(Stage)) stage: Stage,
+  ) {
+    return this.projectService.changeState(projectId, stage);
   }
 }

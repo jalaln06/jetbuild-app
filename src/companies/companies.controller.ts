@@ -49,7 +49,6 @@ export class CompaniesController {
   })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiBadRequestResponse({ description: 'wrong parameters' })
-  @UseGuards(AuthGuard('jwt'))
   async CreateNewCompany(
     @Body() company: CreateCompanyDto,
     @AuthUser() user: User,

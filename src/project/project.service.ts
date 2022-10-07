@@ -1,11 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, Project } from '@prisma/client';
+import { stat } from 'fs';
 import { PrismaService } from 'prisma/module/prisma.service';
 import { take } from 'rxjs';
 import { CreateProjectDto } from './dto/project.dto';
 
 @Injectable()
 export class ProjectService {
+  async changeState(projectId: number, stage: any) {
+    try {
+      this.prisma.project.update({
+        where: {
+          id: projectId,
+        },
+        data: {
+          stage: stage,
+        },
+      });
+    } catch (error) {}
+  }
   constructor(private prisma: PrismaService) {}
 
   async createProject(dto: CreateProjectDto, id: number): Promise<Project> {
