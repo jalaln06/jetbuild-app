@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Stage } from '@prisma/client';
-import { IsString, isString } from 'class-validator';
+import { IsOptional, IsString, isString } from 'class-validator';
 
 export class CreateProjectDto {
   @IsString()
@@ -13,5 +13,6 @@ export class CreateProjectDto {
 export class UpdateProjectDto {
   @IsString()
   @ApiProperty({ description: 'Stage', example: 'INPROGRESS' })
+  @IsOptional()
   stage: Stage;
 }

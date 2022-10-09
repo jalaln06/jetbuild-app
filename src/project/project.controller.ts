@@ -79,7 +79,7 @@ export class ProjectController {
   ) {
     return this.pointService.getPointsFromProject(projectId, limit, page);
   }
-  @Patch('/:projectId/stage/:stage')
+  @Patch('/:projectId')
   @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Take All Points from one project' })
   @Roles(Role.OWNER, Role.MANAGER)
