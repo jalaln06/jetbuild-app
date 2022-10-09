@@ -8,7 +8,6 @@ import { CreateProjectDto, UpdateProjectDto } from './dto/project.dto';
 @Injectable()
 export class ProjectService {
   async changeState(projectId: number, data: UpdateProjectDto) {
-    console.log(data);
     try {
       await this.prisma.project.update({
         where: {
@@ -17,7 +16,7 @@ export class ProjectService {
         data: { stage: data.stage },
       });
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
   constructor(private prisma: PrismaService) {}
