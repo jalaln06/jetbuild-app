@@ -81,14 +81,12 @@ export class ProjectController {
   }
   @Patch('/:projectId')
   @UseGuards(AuthGuard('jwt'))
-  @ApiOperation({ summary: 'Take All Points from one project' })
+  @ApiOperation({ summary: 'Update Project' })
   @Roles(Role.OWNER, Role.MANAGER)
   ChangeState(
     @Param('projectId', ParseIntPipe) projectId: number,
     @Body() data: UpdateProjectDto,
   ) {
-    console.log(data);
     return this.projectService.changeState(projectId, data);
-    console.log(data);
   }
 }
