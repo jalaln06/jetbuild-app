@@ -1,0 +1,6 @@
+export enum Stage {
+  CREATED = 'CREATED',
+  INPROGRESS = 'INPROGRESS',
+  ONCHECK = 'ONCHECK',
+  FINISHED = 'FINISHED',
+}

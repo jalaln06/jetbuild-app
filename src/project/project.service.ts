@@ -3,21 +3,22 @@ import { Prisma, Project } from '@prisma/client';
 import { stat } from 'fs';
 import { PrismaService } from 'prisma/module/prisma.service';
 import { take } from 'rxjs';
-import { CreateProjectDto } from './dto/project.dto';
+import { CreateProjectDto, UpdateProjectDto } from './dto/project.dto';
 
 @Injectable()
 export class ProjectService {
-  async changeState(projectId: number, stage: any) {
+  async changeState(projectId: number, data: UpdateProjectDto) {
+    console.log(data);
     try {
-      this.prisma.project.update({
+      await this.prisma.project.update({
         where: {
           id: projectId,
         },
-        data: {
-          stage: stage,
-        },
+        data: { stage: data.stage },
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }
   constructor(private prisma: PrismaService) {}
 

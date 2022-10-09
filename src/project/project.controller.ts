@@ -23,11 +23,10 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Role, Stage } from '@prisma/client';
-import { stat, unwatchFile } from 'fs';
 import { Roles } from 'src/auth/roles.decorator';
 import { PaginationDTO } from 'src/dto/pagination.dto';
 import { PointService } from 'src/point/point.service';
-import { CreateProjectDto } from './dto/project.dto';
+import { CreateProjectDto, UpdateProjectDto } from './dto/project.dto';
 import { ProjectService } from './project.service';
 @ApiBearerAuth()
 @ApiTags('projects')
@@ -86,8 +85,10 @@ export class ProjectController {
   @Roles(Role.OWNER, Role.MANAGER)
   ChangeState(
     @Param('projectId', ParseIntPipe) projectId: number,
-    @Param('state', new ParseEnumPipe(Stage)) stage: Stage,
+    @Body() data: UpdateProjectDto,
   ) {
-    return this.projectService.changeState(projectId, stage);
+    console.log(data);
+    return this.projectService.changeState(projectId, data);
+    console.log(data);
   }
 }
