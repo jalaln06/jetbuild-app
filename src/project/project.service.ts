@@ -7,6 +7,13 @@ import { CreateProjectDto, UpdateProjectDto } from './dto/project.dto';
 
 @Injectable()
 export class ProjectService {
+  async delete(projectId: number) {
+    return await this.prisma.project.delete({
+      where: {
+        id: projectId,
+      },
+    });
+  }
   async changeState(projectId: number, data: UpdateProjectDto) {
     try {
       await this.prisma.project.update({

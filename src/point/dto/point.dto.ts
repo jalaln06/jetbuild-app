@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString } from 'class-validator';
+import { Stage } from '@prisma/client';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreatePointDto {
   @IsString()
@@ -11,4 +12,10 @@ export class CreatePointDto {
   @IsNumber()
   @ApiProperty({ description: 'Project Id', example: '1' })
   projectId: number;
+}
+export class UpdatePointtDto {
+  @IsString()
+  @ApiProperty({ description: 'Stage', example: 'INPROGRESS' })
+  @IsOptional()
+  stage: Stage;
 }

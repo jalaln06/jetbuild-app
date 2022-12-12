@@ -77,6 +77,7 @@ export class PointController {
   async deletePoint(@Param('pointId', ParseIntPipe) pointId: number) {
     return await this.pointService.deletePoint(pointId);
   }
+
   @Post('uploadfake')
   @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(FileInterceptor('file'))
