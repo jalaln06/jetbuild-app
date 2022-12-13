@@ -167,13 +167,12 @@ export class CompaniesController {
   @Roles(Role.OWNER, Role.MANAGER)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Post('/:companyId/user/:userEmail')
-  inviteUserToCompany(
+  async inviteUserToCompany(
     @Param('userEmail') userEmail: string,
     @Param('companyId', ParseIntPipe) companyId: number,
     @Body('role') role: Role,
   ) {
     try {
-      console.log(userEmail);
       await this.companiesService.inviteUserToCompany(userEmail, companyId);
     } catch (error) {}
   }
