@@ -115,7 +115,7 @@ export class PointController {
   ) {
     return await this.photoService.uploadPhoto(file, data);
   }
-  @Post('upload')
+
   @UseGuards(AuthGuard('jwt'))
   async uploadFile(@Body() data: CreatePhotoDto) {
     return await this.photoService.uploadPhotoWithLink(data);
