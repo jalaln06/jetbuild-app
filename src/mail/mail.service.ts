@@ -18,7 +18,7 @@ export class MailService {
       html: `<p>Hey</p>
       <p>Please click below to confirm your email</p>
       <p>
-          <a href="http://jetbuild-app.herokuapp.com/auth/activate/${token} ">Confirm</a>
+          <a href="http://jetbuild-app.herokuapp.com/auth/activate/${token}">Confirm</a>
       </p>
       
       <p>If you did not request this email you can safely ignore it.</p>
