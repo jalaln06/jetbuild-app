@@ -100,14 +100,16 @@ export class CompaniesController {
   @Roles(Role.OWNER, Role.MANAGER)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Post('/:companyId/user/:userEmail')
-  addUserToCompany(
+  async addUserToCompany(
     @Param('userEmail') userEmail: string,
     @Param('companyId', ParseIntPipe) companyId: number,
     @Body('role') role: Role,
   ) {
-    try {
-      this.companiesService.asignUserToCompany(userEmail, companyId, 'WORKER');
-    } catch (error) {}
+    return await this.companiesService.asignUserToCompany(
+      userEmail,
+      companyId,
+      'WORKER',
+    );
   }
   @Post('/:companyId/project')
   @UseGuards(AuthGuard('jwt'))
@@ -124,9 +126,7 @@ export class CompaniesController {
     @Body() project: CreateProjectDto,
     @Param('companyId', ParseIntPipe) companyId: number,
   ) {
-    try {
-      return await this.projectService.createProject(project, companyId);
-    } catch (error) {}
+    return await this.projectService.createProject(project, companyId);
   }
   @Get('/:companyId/projects')
   @ApiOperation({ summary: 'Get all projects from company' })
@@ -152,7 +152,7 @@ export class CompaniesController {
     @Param('companyId', ParseIntPipe) companyId: number,
     @AuthUser() user: User,
   ) {
-    this.companiesService.deleteCompanyById(companyId, user);
+    await this.companiesService.deleteCompanyById(companyId, user);
   }
   @Get('/:companyId/users')
   async getAllUsersFromCompanu(
@@ -174,7 +174,7 @@ export class CompaniesController {
   ) {
     try {
       console.log(userEmail);
-      this.companiesService.inviteUserToCompany(userEmail, companyId);
+      await this.companiesService.inviteUserToCompany(userEmail, companyId);
     } catch (error) {}
   }
 }
