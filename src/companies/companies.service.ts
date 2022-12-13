@@ -91,6 +91,7 @@ export class CompaniesService {
       },
     });
   }
+
   async asignUserToCompany(userEmail: string, companyId: number, Role: Role) {
     const user = await this.prisma.user.findUnique({
       where: { email: userEmail },
@@ -119,6 +120,7 @@ export class CompaniesService {
       );
     }
   }
+
   async getCompaniesIdsByUserId(userId: number) {
     const result = await this.prisma.usersOnCompanies.findMany({
       where: { userId: userId },
@@ -129,6 +131,7 @@ export class CompaniesService {
     }
     return await result;
   }
+
   async getUsersByCompanyId(companyId: number) {
     const res = await this.prisma.company.findUnique({
       where: { id: companyId },

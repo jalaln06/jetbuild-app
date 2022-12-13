@@ -39,6 +39,7 @@ export class PhotoController {
     private photoService: PhotoService,
     private s3Service: S3Service,
   ) {}
+
   @ApiOperation({ summary: 'get photo by id' })
   @UseGuards(AuthGuard('jwt'))
   @ApiBadRequestResponse({ description: 'Photo not found' })

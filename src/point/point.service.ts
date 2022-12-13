@@ -1,9 +1,21 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/module/prisma.service';
-import { CreatePointDto } from './dto/point.dto';
+import { CreatePointDto, UpdatePointtDto } from './dto/point.dto';
 
 @Injectable()
 export class PointService {
+  async changeState(pointId: number, data: UpdatePointtDto) {
+    try {
+      await this.prisma.point.update({
+        where: {
+          id: pointId,
+        },
+        data: { stage: data.stage },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
   async deletePoint(pointId: number) {
     return await this.prisma.point.delete({
       where: {

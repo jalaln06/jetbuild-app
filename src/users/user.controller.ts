@@ -54,11 +54,13 @@ export class UserController {
   ) {
     return await this.companiesService.getCompanieslist(user.id, limit, page);
   }
+
   @UseGuards(AuthGuard('jwt'))
   @Get('/:userId')
   async getUser(@Param('userId', ParseIntPipe) userId: number) {
     return await this.userService.getUserById(userId);
   }
+
   @UseGuards(AuthGuard('jwt'))
   @Patch('/:userId')
   async update(
