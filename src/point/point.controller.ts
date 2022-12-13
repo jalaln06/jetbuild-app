@@ -6,6 +6,7 @@ import {
   NotImplementedException,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   UploadedFile,
@@ -26,13 +27,15 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Role } from '@prisma/client';
 import { PrismaService } from 'prisma/module/prisma.service';
+import { Roles } from 'src/auth/roles.decorator';
 import { CreateCompanyDto } from 'src/companies/dto/company.dto';
 import { PaginationDTO } from 'src/dto/pagination.dto';
 import { CreatePhotoDto } from 'src/photo/dto/photo.dto';
 import { PhotoService } from 'src/photo/photo.service';
 import { S3Service } from 'src/photo/s3.service';
-import { CreatePointDto } from './dto/point.dto';
+import { CreatePointDto, UpdatePointtDto } from './dto/point.dto';
 import { PointService } from './point.service';
 @ApiBearerAuth()
 @ApiTags('point')
@@ -116,5 +119,15 @@ export class PointController {
   @UseGuards(AuthGuard('jwt'))
   async uploadFile(@Body() data: CreatePhotoDto) {
     return await this.photoService.uploadPhotoWithLink(data);
+  }
+  @Patch('/:pointId')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiOperation({ summary: 'Update Project' })
+  @Roles(Role.OWNER, Role.MANAGER)
+  ChangeState(
+    @Param('pointId', ParseIntPipe) pointId: number,
+    @Body() data: UpdatePointtDto,
+  ) {
+    return this.pointService.changeState(pointId, data);
   }
 }
