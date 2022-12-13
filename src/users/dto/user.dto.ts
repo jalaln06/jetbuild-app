@@ -32,10 +32,19 @@ export class CreateUserDto {
   description: string;
 }
 export class UpdateUserDto {
+  @IsOptional()
   @IsString()
   @ApiProperty({
     description: 'Description + Title of the user',
     example: 'John the Carpenter',
   })
   about: string;
+  @IsOptional()
+  @IsString()
+  @ApiProperty({ description: 'First name', example: 'John' })
+  firstName: string;
+  @IsOptional()
+  @IsString()
+  @ApiProperty({ description: 'Last name', example: 'Doe' })
+  lastName: string;
 }

@@ -24,12 +24,14 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Role, User, Company, prisma } from '@prisma/client';
+import { use } from 'passport';
 import AuthUser from 'src/auth/auth-user.decorator';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { PaginationDTO } from 'src/dto/pagination.dto';
 import { CreateProjectDto } from 'src/project/dto/project.dto';
 import { ProjectService } from 'src/project/project.service';
+import { getSystemErrorMap } from 'util';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto, UpdateCompanyDto } from './dto/company.dto';
 @ApiBearerAuth()
@@ -171,6 +173,7 @@ export class CompaniesController {
     @Body('role') role: Role,
   ) {
     try {
+      console.log(userEmail);
       this.companiesService.inviteUserToCompany(userEmail, companyId);
     } catch (error) {}
   }
