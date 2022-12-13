@@ -85,7 +85,7 @@ export class CompaniesService {
   }
 
   async getCompanyById(companyId: number): Promise<Company> {
-    return this.prisma.company.findUnique({
+    return await this.prisma.company.findUnique({
       where: {
         id: companyId,
       },
@@ -96,8 +96,9 @@ export class CompaniesService {
     const user = await this.prisma.user.findUnique({
       where: { email: userEmail },
     });
+    console.log(user);
     if (user == null) {
-      throw new HttpException('User not Found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('User not found');
     }
     const company = await this.prisma.company.findUnique({
       where: { id: companyId },
